@@ -1,0 +1,343 @@
+---
+/**
+ * SovereigntyRadar — pentagon radar chart comparing a typical uninspected
+ * IT estate against the Echo 7 sovereign benchmark across five pillars.
+ *
+ * Data is illustrative; actual scores are produced by the diagnostic engagement.
+ */
+const pillars = ['Identity', 'Velocity', 'Resilience', 'Security', 'Cognitive'];
+const uninspected = [28, 38, 32, 45, 22];
+const sovereign = [88, 82, 90, 92, 78];
+---
+
+<div class="sov-radar-wrap" data-fade>
+  <h3 class="sov-radar__title gradient-text">The five pillars of a sovereign estate</h3>
+  <p class="sov-radar__subtitle">
+    The Sovereignty Index scores your estate across each dimension, producing your Technical Debt
+    Burden in pounds.
+  </p>
+
+  <div class="sov-radar__canvas-wrap">
+    <svg
+      id="sov-radar-svg"
+      class="sov-radar"
+      viewBox="0 0 520 440"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Radar chart comparing a typical uninspected IT estate against the Echo 7 sovereign benchmark across five pillars: Identity, Velocity, Resilience, Security, Cognitive"
+      data-pillars={JSON.stringify(pillars)}
+      data-uninspected={JSON.stringify(uninspected)}
+      data-sovereign={JSON.stringify(sovereign)}
+    ></svg>
+  </div>
+
+  <div class="sov-radar__legend">
+    <span class="sov-radar__legend-item">
+      <span class="sov-radar__legend-swatch sov-radar__legend-swatch--uninspected"></span>
+      Typical uninspected estate
+    </span>
+    <span class="sov-radar__legend-item">
+      <span class="sov-radar__legend-swatch sov-radar__legend-swatch--sovereign"></span>
+      Sovereign benchmark
+    </span>
+  </div>
+
+  <p class="sov-radar__footnote">
+    A representative illustration. Your actual Sovereignty Index scores are produced by the
+    diagnostic engagement.
+  </p>
+</div>
+
+<script is:inline>
+  (function () {
+    var svg = document.getElementById('sov-radar-svg');
+    if (!svg) return;
+
+    var NS = 'http://www.w3.org/2000/svg';
+    var pillars = JSON.parse(svg.getAttribute('data-pillars'));
+    var uninspected = JSON.parse(svg.getAttribute('data-uninspected'));
+    var sovereign = JSON.parse(svg.getAttribute('data-sovereign'));
+
+    var cx = 260;
+    var cy = 205;
+    var radius = 140;
+    var count = pillars.length;
+
+    function angleFor(i) {
+      return (Math.PI * 2 * i) / count - Math.PI / 2;
+    }
+
+    function pointFor(i, value) {
+      var ang = angleFor(i);
+      var r = (radius * value) / 100;
+      return {
+        x: cx + r * Math.cos(ang),
+        y: cy + r * Math.sin(ang)
+      };
+    }
+
+    function makeEl(tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var key in attrs) {
+        if (Object.prototype.hasOwnProperty.call(attrs, key)) {
+          el.setAttribute(key, attrs[key]);
+        }
+      }
+      return el;
+    }
+
+    function polygonPoints(values) {
+      return values.map(function (v, i) {
+        var p = pointFor(i, v);
+        return p.x + ',' + p.y;
+      }).join(' ');
+    }
+
+    // grid rings
+    var gridGroup = makeEl('g', { class: 'sov-radar__grid' });
+    [20, 40, 60, 80, 100].forEach(function (pct) {
+      var ringPoints = [];
+      for (var i = 0; i < count; i++) {
+        var p = pointFor(i, pct);
+        ringPoints.push(p.x + ',' + p.y);
+      }
+      gridGroup.appendChild(makeEl('polygon', {
+        points: ringPoints.join(' '),
+        class: 'sov-radar__ring'
+      }));
+    });
+    svg.appendChild(gridGroup);
+
+    // axis spokes
+    var spokeGroup = makeEl('g', { class: 'sov-radar__spokes' });
+    for (var s = 0; s < count; s++) {
+      var sp = pointFor(s, 100);
+      spokeGroup.appendChild(makeEl('line', {
+        x1: cx, y1: cy, x2: sp.x, y2: sp.y, class: 'sov-radar__spoke'
+      }));
+    }
+    svg.appendChild(spokeGroup);
+
+    // pillar labels
+    var labelGroup = makeEl('g', { class: 'sov-radar__labels' });
+    for (var l = 0; l < count; l++) {
+      var ang = angleFor(l);
+      var labelR = radius + 28;
+      var lx = cx + labelR * Math.cos(ang);
+      var ly = cy + labelR * Math.sin(ang);
+      var cosVal = Math.cos(ang);
+      var anchor = 'middle';
+      if (cosVal > 0.3) anchor = 'start';
+      else if (cosVal < -0.3) anchor = 'end';
+      var label = makeEl('text', {
+        x: lx, y: ly, 'text-anchor': anchor, class: 'sov-radar__label'
+      });
+      label.textContent = pillars[l];
+      labelGroup.appendChild(label);
+    }
+    svg.appendChild(labelGroup);
+
+    // uninspected polygon
+    var uninspectedPoly = makeEl('polygon', {
+      points: polygonPoints(uninspected),
+      class: 'sov-radar__polygon sov-radar__polygon--uninspected'
+    });
+    svg.appendChild(uninspectedPoly);
+
+    // sovereign polygon (wrapped in a group for transform-origin scaling)
+    var sovereignGroup = makeEl('g', {
+      class: 'sov-radar__sovereign-group',
+      style: 'transform-origin: ' + cx + 'px ' + cy + 'px;'
+    });
+    var sovereignPoly = makeEl('polygon', {
+      points: polygonPoints(sovereign),
+      class: 'sov-radar__polygon sov-radar__polygon--sovereign'
+    });
+    sovereignGroup.appendChild(sovereignPoly);
+
+    var dotsGroup = makeEl('g', { class: 'sov-radar__dots' });
+    sovereign.forEach(function (v, i) {
+      var p = pointFor(i, v);
+      dotsGroup.appendChild(makeEl('circle', {
+        cx: p.x, cy: p.y, r: 4.5, class: 'sov-radar__dot'
+      }));
+    });
+    sovereignGroup.appendChild(dotsGroup);
+    svg.appendChild(sovereignGroup);
+
+    // animation
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function revealStatic() {
+      uninspectedPoly.classList.add('is-visible');
+      sovereignGroup.classList.add('is-visible');
+      dotsGroup.classList.add('is-visible');
+    }
+
+    function runAnimation() {
+      if (reduceMotion) {
+        revealStatic();
+        return;
+      }
+      uninspectedPoly.classList.add('is-visible');
+      setTimeout(function () {
+        sovereignGroup.classList.add('is-visible');
+      }, 450);
+      setTimeout(function () {
+        dotsGroup.classList.add('is-visible');
+      }, 1100);
+    }
+
+    if (reduceMotion) {
+      revealStatic();
+    } else {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              runAnimation();
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(svg);
+    }
+  })();
+</script>
+
+<style>
+  .sov-radar-wrap {
+    margin: var(--space-xl) auto 0;
+    max-width: 598px;
+    padding: var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-md);
+    background: rgba(232, 230, 240, 0.02);
+    text-align: center;
+  }
+
+  .sov-radar__title {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+  }
+
+  .sov-radar__subtitle {
+    margin: var(--space-xs) auto 0;
+    max-width: 48ch;
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .sov-radar__canvas-wrap {
+    margin-top: var(--space-md);
+    width: 100%;
+  }
+
+  .sov-radar {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .sov-radar__legend {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .sov-radar__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    color: var(--colour-text-muted);
+  }
+
+  .sov-radar__legend-swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  .sov-radar__legend-swatch--uninspected {
+    background: #e2607a;
+  }
+
+  .sov-radar__legend-swatch--sovereign {
+    background: var(--colour-accent);
+  }
+
+  .sov-radar__footnote {
+    margin-top: var(--space-md);
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  :global(.sov-radar__ring) {
+    fill: none;
+    stroke: var(--colour-hairline);
+    stroke-width: 1;
+  }
+
+  :global(.sov-radar__spoke) {
+    stroke: var(--colour-hairline);
+    stroke-width: 1;
+  }
+
+  :global(.sov-radar__label) {
+    fill: var(--colour-text-muted);
+    font-size: 13px;
+    font-family: var(--font-body);
+  }
+
+  :global(.sov-radar__polygon) {
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-quiet, ease);
+  }
+
+  :global(.sov-radar__polygon.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.sov-radar__polygon--uninspected) {
+    fill: rgba(226, 96, 122, 0.16);
+    stroke: rgba(226, 96, 122, 0.4);
+  }
+
+  :global(.sov-radar__polygon--sovereign) {
+    fill: rgba(43, 253, 215, 0.18);
+    stroke: var(--colour-accent);
+  }
+
+  :global(.sov-radar__sovereign-group) {
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 700ms var(--ease-quiet, ease), opacity 700ms var(--ease-quiet, ease);
+  }
+
+  :global(.sov-radar__sovereign-group.is-visible) {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  :global(.sov-radar__dots) {
+    opacity: 0;
+    transition: opacity 500ms var(--ease-quiet, ease);
+  }
+
+  :global(.sov-radar__dots.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.sov-radar__dot) {
+    fill: var(--colour-accent);
+  }
+</style>

@@ -1,0 +1,444 @@
+---
+/**
+ * TechDebtChart — line chart comparing an unmanaged IT estate's compounding
+ * risk-exposure cost against the flat, irreducible cost of a managed,
+ * post-Sovereignty-Index estate.
+ *
+ * Data is illustrative (mid-market cost model, 50-249 employees).
+ */
+const labels = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'];
+const unmanaged = [220, 380, 600, 920, 1320];
+const managed = [220, 200, 185, 175, 165];
+const yMax = 1400;
+const gridLines = [250, 500, 750, 1000];
+---
+
+<div class="debtchart" data-fade>
+  <h3 class="debtchart__title gradient-text">The cost of inaction compounds</h3>
+  <p class="debtchart__subtitle">Annual IT risk exposure — unmanaged estate vs post-Sovereignty Index</p>
+
+  <div class="debtchart__canvas-wrap">
+    <svg
+      id="debtchart-svg"
+      class="debtchart__svg"
+      viewBox="0 0 700 310"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Line chart comparing rising unmanaged IT estate cost against a flat managed estate cost over five years"
+      data-labels={JSON.stringify(labels)}
+      data-unmanaged={JSON.stringify(unmanaged)}
+      data-managed={JSON.stringify(managed)}
+      data-ymax={yMax}
+      data-gridlines={JSON.stringify(gridLines)}
+    ></svg>
+  </div>
+
+  <div class="debtchart__legend">
+    <span class="debtchart__legend-item">
+      <span class="debtchart__legend-swatch debtchart__legend-swatch--unmanaged"></span>
+      Unmanaged estate
+    </span>
+    <span class="debtchart__legend-item">
+      <span class="debtchart__legend-swatch debtchart__legend-swatch--managed"></span>
+      Post-Sovereignty Index
+    </span>
+  </div>
+
+  <p class="debtchart__footnote">
+    Illustrative mid-market cost model (50&ndash;249 employees). Does not represent any specific
+    organisation. Sources: Ponemon Institute / IBM Security.
+  </p>
+</div>
+
+<script is:inline>
+  (function () {
+    var svg = document.getElementById('debtchart-svg');
+    if (!svg) return;
+
+    var NS = 'http://www.w3.org/2000/svg';
+    var labels = JSON.parse(svg.getAttribute('data-labels'));
+    var unmanaged = JSON.parse(svg.getAttribute('data-unmanaged'));
+    var managed = JSON.parse(svg.getAttribute('data-managed'));
+    var yMax = Number(svg.getAttribute('data-ymax'));
+    var gridLines = JSON.parse(svg.getAttribute('data-gridlines'));
+
+    var padLeft = 56;
+    var padRight = 28;
+    var padTop = 24;
+    var padBottom = 36;
+    var width = 700;
+    var height = 310;
+    var plotW = width - padLeft - padRight;
+    var plotH = height - padTop - padBottom;
+
+    function xFor(i) {
+      return padLeft + (plotW * i) / (labels.length - 1);
+    }
+    function yFor(v) {
+      return padTop + plotH - (plotH * v) / yMax;
+    }
+
+    function formatGridLabel(v) {
+      if (v >= 1000) return '£' + (v / 1000) + 'm';
+      return '£' + v + 'k';
+    }
+
+    function makeEl(tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var key in attrs) {
+        if (Object.prototype.hasOwnProperty.call(attrs, key)) {
+          el.setAttribute(key, attrs[key]);
+        }
+      }
+      return el;
+    }
+
+    function smoothPath(points) {
+      if (points.length < 2) return '';
+      var d = 'M ' + points[0].x + ' ' + points[0].y;
+      for (var i = 0; i < points.length - 1; i++) {
+        var p0 = points[i];
+        var p1 = points[i + 1];
+        var cpx = p0.x + (p1.x - p0.x) / 2;
+        d += ' C ' + cpx + ' ' + p0.y + ' ' + cpx + ' ' + p1.y + ' ' + p1.x + ' ' + p1.y;
+      }
+      return d;
+    }
+
+    // defs: gradients
+    var defs = makeEl('defs', {});
+    var lineGrad = makeEl('linearGradient', {
+      id: 'debtchart-line-gradient',
+      x1: '0%', y1: '0%', x2: '100%', y2: '0%'
+    });
+    lineGrad.appendChild(makeEl('stop', { offset: '0%', 'stop-color': 'var(--colour-gradient-start)' }));
+    lineGrad.appendChild(makeEl('stop', { offset: '100%', 'stop-color': 'var(--colour-gradient-end)' }));
+    defs.appendChild(lineGrad);
+
+    var fillGrad = makeEl('linearGradient', {
+      id: 'debtchart-fill-gradient',
+      x1: '0%', y1: '0%', x2: '0%', y2: '100%'
+    });
+    fillGrad.appendChild(makeEl('stop', { offset: '0%', 'stop-color': 'var(--colour-accent)', 'stop-opacity': '0.22' }));
+    fillGrad.appendChild(makeEl('stop', { offset: '100%', 'stop-color': 'var(--colour-accent)', 'stop-opacity': '0' }));
+    defs.appendChild(fillGrad);
+    svg.appendChild(defs);
+
+    // gridlines + labels
+    var gridGroup = makeEl('g', { class: 'debtchart__grid' });
+    gridLines.forEach(function (v) {
+      var y = yFor(v);
+      gridGroup.appendChild(makeEl('line', {
+        x1: padLeft, x2: width - padRight, y1: y, y2: y,
+        class: 'debtchart__gridline'
+      }));
+      var label = makeEl('text', {
+        x: padLeft - 10, y: y + 4, class: 'debtchart__grid-label', 'text-anchor': 'end'
+      });
+      label.textContent = formatGridLabel(v);
+      gridGroup.appendChild(label);
+    });
+    svg.appendChild(gridGroup);
+
+    // x axis labels
+    var xAxisGroup = makeEl('g', { class: 'debtchart__xaxis' });
+    labels.forEach(function (lbl, i) {
+      var label = makeEl('text', {
+        x: xFor(i), y: height - padBottom + 22, class: 'debtchart__x-label', 'text-anchor': 'middle'
+      });
+      label.textContent = lbl;
+      xAxisGroup.appendChild(label);
+    });
+    svg.appendChild(xAxisGroup);
+
+    var unmanagedPoints = unmanaged.map(function (v, i) { return { x: xFor(i), y: yFor(v) }; });
+    var managedPoints = managed.map(function (v, i) { return { x: xFor(i), y: yFor(v) }; });
+
+    var unmanagedPath = smoothPath(unmanagedPoints);
+    var managedPath = smoothPath(managedPoints);
+
+    // fill area between the two curves
+    var fillPoints = unmanagedPoints.concat(managedPoints.slice().reverse());
+    var fillD = 'M ' + fillPoints[0].x + ' ' + fillPoints[0].y;
+    for (var fi = 1; fi < unmanagedPoints.length; fi++) {
+      var fp0 = unmanagedPoints[fi - 1];
+      var fp1 = unmanagedPoints[fi];
+      var fcpx = fp0.x + (fp1.x - fp0.x) / 2;
+      fillD += ' C ' + fcpx + ' ' + fp0.y + ' ' + fcpx + ' ' + fp1.y + ' ' + fp1.x + ' ' + fp1.y;
+    }
+    var revManaged = managedPoints.slice().reverse();
+    fillD += ' L ' + revManaged[0].x + ' ' + revManaged[0].y;
+    for (var mi = 1; mi < revManaged.length; mi++) {
+      var mp0 = revManaged[mi - 1];
+      var mp1 = revManaged[mi];
+      var mcpx = mp0.x + (mp1.x - mp0.x) / 2;
+      fillD += ' C ' + mcpx + ' ' + mp0.y + ' ' + mcpx + ' ' + mp1.y + ' ' + mp1.x + ' ' + mp1.y;
+    }
+    fillD += ' Z';
+
+    var fillPath = makeEl('path', { d: fillD, class: 'debtchart__fill-area' });
+    svg.appendChild(fillPath);
+
+    var unmanagedLine = makeEl('path', { d: unmanagedPath, class: 'debtchart__line debtchart__line--unmanaged' });
+    svg.appendChild(unmanagedLine);
+
+    var managedLine = makeEl('path', { d: managedPath, class: 'debtchart__line debtchart__line--managed' });
+    svg.appendChild(managedLine);
+
+    // dots
+    var dotsGroup = makeEl('g', { class: 'debtchart__dots' });
+    unmanagedPoints.forEach(function (p) {
+      dotsGroup.appendChild(makeEl('circle', { cx: p.x, cy: p.y, r: 4, class: 'debtchart__dot debtchart__dot--unmanaged' }));
+    });
+    managedPoints.forEach(function (p) {
+      dotsGroup.appendChild(makeEl('circle', { cx: p.x, cy: p.y, r: 4, class: 'debtchart__dot debtchart__dot--managed' }));
+    });
+    svg.appendChild(dotsGroup);
+
+    // callout near Year 5
+    var lastUnmanaged = unmanagedPoints[unmanagedPoints.length - 1];
+    var lastManaged = managedPoints[managedPoints.length - 1];
+
+    var calloutGroup = makeEl('g', { class: 'debtchart__callout' });
+    var bracketX = lastUnmanaged.x + 14;
+    calloutGroup.appendChild(makeEl('path', {
+      d: 'M ' + bracketX + ' ' + lastUnmanaged.y + ' L ' + (bracketX + 6) + ' ' + lastUnmanaged.y +
+        ' L ' + (bracketX + 6) + ' ' + lastManaged.y + ' L ' + bracketX + ' ' + lastManaged.y,
+      class: 'debtchart__bracket'
+    }));
+
+    var calloutMidY = (lastUnmanaged.y + lastManaged.y) / 2;
+    var boxW = 78;
+    var boxH = 26;
+    var boxX = Math.min(bracketX + 12, width - padRight - boxW);
+    calloutGroup.appendChild(makeEl('rect', {
+      x: boxX, y: calloutMidY - boxH / 2, width: boxW, height: boxH, rx: 6,
+      class: 'debtchart__callout-box'
+    }));
+    var calloutText = makeEl('text', {
+      x: boxX + boxW / 2, y: calloutMidY + 4, 'text-anchor': 'middle', class: 'debtchart__callout-text'
+    });
+    calloutText.textContent = '£1.15m gap';
+    calloutGroup.appendChild(calloutText);
+    svg.appendChild(calloutGroup);
+
+    // optimised baseline label near managed Year 5 point
+    var baselineLabel = makeEl('text', {
+      x: lastManaged.x - 6, y: lastManaged.y + 18, 'text-anchor': 'end', class: 'debtchart__baseline-label'
+    });
+    baselineLabel.textContent = '~£165k optimised baseline';
+    svg.appendChild(baselineLabel);
+
+    // animation
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var animatedEls = [fillPath, dotsGroup, calloutGroup, baselineLabel];
+
+    function revealStatic() {
+      animatedEls.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    function drawLine(pathEl, delay) {
+      var length = pathEl.getTotalLength();
+      pathEl.style.strokeDasharray = String(length);
+      pathEl.style.strokeDashoffset = String(length);
+      pathEl.getBoundingClientRect();
+      pathEl.style.transition = 'stroke-dashoffset 1400ms var(--ease-quiet, ease) ' + delay + 'ms';
+      requestAnimationFrame(function () {
+        pathEl.style.strokeDashoffset = '0';
+      });
+    }
+
+    function runAnimation() {
+      if (reduceMotion) {
+        revealStatic();
+        return;
+      }
+      drawLine(unmanagedLine, 0);
+      drawLine(managedLine, 0);
+      setTimeout(revealStatic, 1500);
+    }
+
+    if (reduceMotion) {
+      revealStatic();
+    } else {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              runAnimation();
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+      observer.observe(svg);
+    }
+  })();
+</script>
+
+<style>
+  .debtchart {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-md);
+    background: rgba(232, 230, 240, 0.02);
+  }
+
+  .debtchart__title {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    max-width: 22ch;
+  }
+
+  .debtchart__subtitle {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .debtchart__canvas-wrap {
+    margin-top: var(--space-md);
+    width: 100%;
+  }
+
+  .debtchart__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .debtchart__legend {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .debtchart__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    color: var(--colour-text-muted);
+  }
+
+  .debtchart__legend-swatch {
+    display: inline-block;
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .debtchart__legend-swatch--unmanaged {
+    background: linear-gradient(90deg, var(--colour-gradient-start), var(--colour-gradient-end));
+  }
+
+  .debtchart__legend-swatch--managed {
+    background: var(--colour-text-muted);
+  }
+
+  .debtchart__footnote {
+    margin-top: var(--space-md);
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  :global(.debtchart__gridline) {
+    stroke: var(--colour-hairline);
+    stroke-width: 1;
+  }
+
+  :global(.debtchart__grid-label),
+  :global(.debtchart__x-label) {
+    fill: var(--colour-text-muted);
+    font-size: 11px;
+    font-family: var(--font-body);
+  }
+
+  :global(.debtchart__fill-area) {
+    fill: url(#debtchart-fill-gradient);
+    opacity: 0;
+    transition: opacity 600ms var(--ease-quiet, ease);
+  }
+
+  :global(.debtchart__fill-area.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.debtchart__line) {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  :global(.debtchart__line--unmanaged) {
+    stroke: url(#debtchart-line-gradient);
+  }
+
+  :global(.debtchart__line--managed) {
+    stroke: var(--colour-text-muted);
+  }
+
+  :global(.debtchart__dots) {
+    opacity: 0;
+    transition: opacity 500ms var(--ease-quiet, ease);
+  }
+
+  :global(.debtchart__dots.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.debtchart__dot--unmanaged) {
+    fill: var(--colour-accent);
+  }
+
+  :global(.debtchart__dot--managed) {
+    fill: var(--colour-text-muted);
+  }
+
+  :global(.debtchart__callout) {
+    opacity: 0;
+    transition: opacity 500ms var(--ease-quiet, ease);
+  }
+
+  :global(.debtchart__callout.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.debtchart__bracket) {
+    fill: none;
+    stroke: var(--colour-text-muted);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  :global(.debtchart__callout-box) {
+    fill: rgba(43, 253, 215, 0.08);
+    stroke: var(--colour-accent);
+    stroke-width: 1;
+  }
+
+  :global(.debtchart__callout-text) {
+    fill: var(--colour-text);
+    font-size: 12px;
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  :global(.debtchart__baseline-label) {
+    fill: var(--colour-text-muted);
+    font-size: 10px;
+    font-family: var(--font-body);
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 500ms var(--ease-quiet, ease);
+  }
+
+  :global(.debtchart__baseline-label.is-visible) {
+    opacity: 1;
+  }
+</style>
