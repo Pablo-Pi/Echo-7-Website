@@ -65,10 +65,54 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
     margin-top: var(--space-lg);
     color: var(--colour-text-muted);
     font-size: 1.05rem;
+    line-height: 1.75;
   }
 
   .article__body :global(p) {
     margin-bottom: var(--space-md);
+  }
+
+  .article__body :global(p:first-of-type) {
+    font-size: 1.18rem;
+    color: var(--colour-text);
+  }
+
+  .article__body :global(h2) {
+    position: relative;
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+    padding-top: var(--space-md);
+    font-size: clamp(1.25rem, 2.6vw, 1.55rem);
+    letter-spacing: 0.01em;
+    color: var(--colour-accent);
+  }
+
+  .article__body :global(h2)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 2px;
+    background: var(--gradient-primary);
+  }
+
+  .article__body :global(strong) {
+    color: var(--colour-accent);
+    font-weight: 600;
+  }
+
+  .article__body :global(a) {
+    color: var(--colour-accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(43, 253, 215, 0.35);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 200ms var(--ease-quiet);
+  }
+
+  .article__body :global(a:hover),
+  .article__body :global(a:focus-visible) {
+    text-decoration-color: var(--colour-accent);
   }
 
   .article__footer-nav {

@@ -102,8 +102,8 @@ img, svg {
 
 .link-subtle:hover,
 .link-subtle:focus-visible {
-  color: var(--colour-text);
-  border-color: var(--colour-text-muted);
+  color: var(--colour-accent);
+  border-color: var(--colour-accent);
 }
 
 .btn-primary--glow {
