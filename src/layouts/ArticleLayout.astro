@@ -33,6 +33,9 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
         <div class="article__body">
           <slot />
         </div>
+        <div class="article__footer-nav">
+          <a href="/insights/" class="link-subtle">← Back to Insights</a>
+        </div>
       </div>
     </article>
   </main>
@@ -66,5 +69,11 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
 
   .article__body :global(p) {
     margin-bottom: var(--space-md);
+  }
+
+  .article__footer-nav {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--colour-hairline);
   }
 </style>
