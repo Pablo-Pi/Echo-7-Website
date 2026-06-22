@@ -8,9 +8,10 @@ interface Props {
   description: string;
   publishDate: Date;
   canonicalPath: string;
+  backLink?: { href: string; label: string };
 }
 
-const { title, description, publishDate, canonicalPath } = Astro.props;
+const { title, description, publishDate, canonicalPath, backLink } = Astro.props;
 
 const formattedDate = publishDate.toLocaleDateString('en-GB', {
   day: 'numeric',
@@ -24,6 +25,9 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
   <main>
     <article class="article section">
       <div class="container text-column">
+        {backLink && (
+          <a href={backLink.href} class="article__back link-subtle">← {backLink.label}</a>
+        )}
         <p class="article__date">{formattedDate}</p>
         <h1 class="article__title">{title}</h1>
         <div class="article__body">
@@ -36,6 +40,12 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
 </BaseLayout>
 
 <style>
+  .article__back {
+    display: inline-block;
+    margin-bottom: var(--space-md);
+    font-size: 0.85rem;
+  }
+
   .article__date {
     font-size: 0.85rem;
     letter-spacing: 0.06em;

@@ -12,6 +12,11 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await render(article);
+
+const backLink =
+  article.id === 'the-five-pillars'
+    ? { href: '/#five-pillars-radar', label: 'Back to the Sovereignty Radar' }
+    : undefined;
 ---
 
 <ArticleLayout
@@ -19,6 +24,7 @@ const { Content } = await render(article);
   description={article.data.description}
   publishDate={article.data.publishDate}
   canonicalPath={`/insights/${article.id}/`}
+  backLink={backLink}
 >
   <Content />
 </ArticleLayout>

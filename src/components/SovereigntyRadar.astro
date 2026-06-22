@@ -10,7 +10,7 @@ const uninspected = [28, 38, 32, 45, 22];
 const sovereign = [88, 82, 90, 92, 78];
 ---
 
-<div class="sov-radar-wrap" data-fade>
+<div class="sov-radar-wrap" id="five-pillars-radar" data-fade>
   <h3 class="sov-radar__title gradient-text">The five pillars of a sovereign estate</h3>
   <p class="sov-radar__subtitle">
     The Sovereignty Index scores your estate across each dimension, producing your Technical Debt
@@ -133,7 +133,14 @@ const sovereign = [88, 82, 90, 92, 78];
         x: lx, y: ly, 'text-anchor': anchor, class: 'sov-radar__label'
       });
       label.textContent = pillars[l];
-      labelGroup.appendChild(label);
+
+      var linkEl = makeEl('a', {
+        href: '/insights/the-five-pillars/#' + pillars[l].toLowerCase(),
+        class: 'sov-radar__label-link',
+        'aria-label': 'Read more about the ' + pillars[l] + ' pillar'
+      });
+      linkEl.appendChild(label);
+      labelGroup.appendChild(linkEl);
     }
     svg.appendChild(labelGroup);
 
@@ -295,6 +302,17 @@ const sovereign = [88, 82, 90, 92, 78];
     fill: var(--colour-text-muted);
     font-size: 13px;
     font-family: var(--font-body);
+    transition: fill 200ms var(--ease-quiet, ease);
+  }
+
+  :global(.sov-radar__label-link) {
+    cursor: pointer;
+  }
+
+  :global(.sov-radar__label-link:hover .sov-radar__label),
+  :global(.sov-radar__label-link:focus .sov-radar__label) {
+    fill: var(--colour-accent);
+    text-decoration: underline;
   }
 
   :global(.sov-radar__polygon) {
