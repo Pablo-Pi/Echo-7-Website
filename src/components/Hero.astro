@@ -164,6 +164,13 @@ import SynapseField from './SynapseField.astro';
 
   .hero__line--accent {
     display: block;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .hero__line--accent {
+      white-space: normal;
+    }
   }
 
   .hero__subhead {
