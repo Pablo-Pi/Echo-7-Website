@@ -58,41 +58,37 @@ Example usage in CSS:
 
 ## Contact Form — HubSpot Setup
 
-The contact form at `/contact` submits to the HubSpot Forms API. Before going live you need to add your portal ID and form GUID.
+The contact form at `/contact` submits client-side (via `fetch`) directly to the HubSpot Forms API — no server, no API key required.
 
-### One-time setup
+### Fields
 
-1. **Create the HubSpot form**
-   - Log in → Marketing → Forms → Create form → Blank form
-   - Add these fields (use the exact internal names):
-     - `firstname` (label: First name) — optional
-     - `lastname` (label: Last name) — optional
-     - `email` (label: Business email) — required
-     - `phone` (label: Phone) — optional
-     - `company` (label: Company) — required
-     - `jobtitle` (label: Your role) — optional
-     - `message` (label: What's the main challenge on your board's agenda?) — required
-   - Save and publish the form
+| Field | Internal name | Required |
+|---|---|---|
+| First name | `firstname` | optional |
+| Last name | `lastname` | optional |
+| Business email | `email` | **required** |
+| Phone | `phone` | optional |
+| Company | `company` | **required** |
+| Your role | `jobtitle` | optional |
+| Main challenge | `message` | **required** |
 
-2. **Get your Portal ID**
-   - Settings (gear icon) → Account Setup → Account Details
-   - Your HubSpot ID is shown — it's an 8-digit number
+The `phone` field is mapped to HubSpot's standard `phone` contact property.
 
-3. **Get your Form GUID**
-   - Open the form → Actions → Share → Embed code
-   - Copy the `formId` value — it looks like `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+### Configuration
 
-4. **Add the values to the site**
-   - Open `src/pages/contact.astro`
-   - Find these two lines near the bottom:
-     ```js
-     const PORTAL_ID = 'YOUR_PORTAL_ID';
-     const FORM_GUID = 'YOUR_FORM_GUID';
-     ```
-   - Replace the placeholder strings with your actual values
-   - Rebuild and redeploy
+The live portal and form IDs are set in `src/pages/contact.astro`, near the top of the `<script>` block:
 
-Once live, every form submission appears in HubSpot under Contacts with the full message attached.
+```js
+const PORTAL_ID = '147388827';
+const FORM_GUID = 'e661070b-cd77-411e-a45c-7e1859bb4ede';
+```
+
+These point at the published HubSpot form and submission endpoint
+(`https://api.hsforms.com/submissions/v3/integration/submit/{PORTAL_ID}/{FORM_GUID}`).
+If the form is ever recreated in HubSpot, update both values here — that's the only
+place they're defined.
+
+Every successful submission appears in HubSpot under Contacts with the full message attached.
 
 ---
 

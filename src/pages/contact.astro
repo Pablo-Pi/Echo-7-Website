@@ -1,0 +1,460 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Contact — Echo 7"
+  description="Tell us about your estate and the challenge on your board's agenda. We review every submission and respond within one working day."
+  canonicalPath="/contact"
+>
+  <Nav />
+  <main>
+    <section class="section contact">
+      <div class="container">
+        <div class="contact__intro text-column" data-fade>
+          <h1 class="contact__headline">Tell us what's on your board's agenda.</h1>
+          <p class="contact__lead">
+            A few details and a short note on the challenge you're facing. We read every
+            submission ourselves — no queue, no call centre.
+          </p>
+        </div>
+
+        <div class="contact__grid">
+          <form class="contact__form" id="contact-form" data-fade style="--fade-delay:80ms" novalidate>
+            <div class="contact__row">
+              <div class="contact__field">
+                <label for="firstname">First name</label>
+                <input
+                  type="text"
+                  id="firstname"
+                  name="firstname"
+                  autocomplete="given-name"
+                  placeholder="Jane"
+                />
+                <span class="contact__error" aria-live="polite"></span>
+              </div>
+
+              <div class="contact__field">
+                <label for="lastname">Last name</label>
+                <input
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  autocomplete="family-name"
+                  placeholder="Smith"
+                />
+                <span class="contact__error" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <div class="contact__field">
+              <label for="email">Business email <span class="contact__required">*</span></label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                placeholder="jane@company.com"
+                required
+              />
+              <span class="contact__error" aria-live="polite"></span>
+            </div>
+
+            <div class="contact__field">
+              <label for="phone">Phone</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                autocomplete="tel"
+                placeholder="+44 (0)20 1234 5678"
+              />
+              <span class="contact__error" aria-live="polite"></span>
+            </div>
+
+            <div class="contact__field">
+              <label for="company">Company <span class="contact__required">*</span></label>
+              <input
+                type="text"
+                id="company"
+                name="company"
+                placeholder="Company Ltd"
+                required
+              />
+              <span class="contact__error" aria-live="polite"></span>
+            </div>
+
+            <div class="contact__field">
+              <label for="jobtitle">Your role</label>
+              <input
+                type="text"
+                id="jobtitle"
+                name="jobtitle"
+                placeholder="e.g. Operations Director"
+              />
+              <span class="contact__error" aria-live="polite"></span>
+            </div>
+
+            <div class="contact__field">
+              <label for="message">Main challenge <span class="contact__required">*</span></label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                placeholder="What's the main challenge on your board's agenda?"
+                required
+              ></textarea>
+              <span class="contact__error" aria-live="polite"></span>
+            </div>
+
+            <p class="contact__privacy">
+              By submitting this form, you agree to our
+              <a href="/privacy/" class="link-subtle">privacy policy</a>.
+              We will only use your details to respond to your enquiry.
+            </p>
+
+            <button type="submit" class="btn-primary contact__submit">Send your message →</button>
+          </form>
+
+          <div id="contact-success" class="contact__panel contact__panel--success" hidden>
+            <h2>Thank you.</h2>
+            <p>
+              Your message has reached us. We review every submission and will come back
+              to you within one working day.
+            </p>
+          </div>
+
+          <div id="contact-error" class="contact__panel contact__panel--error" hidden>
+            <h2>Something went wrong.</h2>
+            <p>
+              Your message did not send. Please try again, or email us directly at
+              <a href="mailto:hello@echo7.io" class="link-subtle">hello@echo7.io</a>.
+            </p>
+          </div>
+
+          <aside class="contact__aside" data-fade style="--fade-delay:160ms">
+            <h2 class="contact__aside-heading">What happens next</h2>
+            <ol class="contact__steps">
+              <li class="contact__step">
+                <span class="contact__step-number gradient-text">01</span>
+                <div>
+                  <p class="contact__step-title">We review your submission</p>
+                  <p class="contact__step-body">
+                    A member of the Echo 7 team reads every enquiry personally — no automated triage.
+                  </p>
+                </div>
+              </li>
+              <li class="contact__step">
+                <span class="contact__step-number gradient-text">02</span>
+                <div>
+                  <p class="contact__step-title">A scoping call</p>
+                  <p class="contact__step-body">
+                    A short conversation to understand your estate and the question you actually need answered.
+                  </p>
+                </div>
+              </li>
+              <li class="contact__step">
+                <span class="contact__step-number gradient-text">03</span>
+                <div>
+                  <p class="contact__step-title">A fixed-fee proposal for the diagnostic</p>
+                  <p class="contact__step-body">
+                    No obligation. You decide whether to proceed once you have the number in writing.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .contact__intro {
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact__headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 20ch;
+  }
+
+  .contact__lead {
+    margin-top: var(--space-md);
+    color: var(--colour-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .contact__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .contact__field label {
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    color: var(--colour-text-muted);
+  }
+
+  .contact__required {
+    color: var(--colour-accent);
+  }
+
+  .contact__field input,
+  .contact__field textarea {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--colour-text);
+    background: rgba(232, 230, 240, 0.03);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 0.9rem;
+    transition: border-color 200ms var(--ease-quiet);
+  }
+
+  .contact__field input:focus,
+  .contact__field textarea:focus {
+    outline: none;
+    border-color: var(--colour-accent);
+  }
+
+  .contact__field textarea {
+    resize: vertical;
+  }
+
+  .contact__field.is-invalid input,
+  .contact__field.is-invalid textarea {
+    border-color: #ff6b6b;
+  }
+
+  .contact__error {
+    min-height: 1.1em;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+  }
+
+  .contact__privacy {
+    font-size: 0.82rem;
+    color: var(--colour-text-muted);
+    opacity: 0.85;
+  }
+
+  .contact__submit {
+    align-self: flex-start;
+    margin-top: var(--space-xs);
+  }
+
+  .contact__panel {
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    background: rgba(232, 230, 240, 0.02);
+  }
+
+  .contact__panel--success h2,
+  .contact__panel--error h2 {
+    font-size: 1.4rem;
+  }
+
+  .contact__panel--success p,
+  .contact__panel--error p {
+    margin-top: var(--space-sm);
+    color: var(--colour-text-muted);
+  }
+
+  .contact__aside {
+    border-top: 1px solid var(--colour-hairline);
+    padding-top: var(--space-lg);
+  }
+
+  .contact__aside-heading {
+    font-size: 1.2rem;
+  }
+
+  .contact__steps {
+    margin-top: var(--space-md);
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .contact__step {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .contact__step-number {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+
+  .contact__step-title {
+    font-weight: 600;
+  }
+
+  .contact__step-body {
+    margin-top: 0.3rem;
+    font-size: 0.92rem;
+    color: var(--colour-text-muted);
+  }
+
+  @media (min-width: 600px) {
+    .contact__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .contact__grid {
+      grid-template-columns: 1.4fr 1fr;
+      align-items: start;
+    }
+
+    .contact__aside {
+      border-top: none;
+      padding-top: 0;
+      border-left: 1px solid var(--colour-hairline);
+      padding-left: var(--space-lg);
+    }
+  }
+</style>
+
+<script>
+  const PORTAL_ID = '147388827';
+  const FORM_GUID = 'e661070b-cd77-411e-a45c-7e1859bb4ede';
+  const HUBSPOT_ENDPOINT = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_GUID}`;
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const successPanel = document.getElementById('contact-success') as HTMLElement | null;
+  const errorPanel = document.getElementById('contact-error') as HTMLElement | null;
+
+  const requiredFields = ['email', 'company', 'message'];
+
+  function getField(name: string): HTMLInputElement | HTMLTextAreaElement | null {
+    return form?.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null;
+  }
+
+  function getFieldWrapper(field: HTMLElement): HTMLElement | null {
+    return field.closest('.contact__field');
+  }
+
+  function getErrorSpan(field: HTMLElement): HTMLElement | null {
+    const wrapper = getFieldWrapper(field);
+    return wrapper?.querySelector('.contact__error') ?? null;
+  }
+
+  function validateField(name: string): boolean {
+    const field = getField(name);
+    if (!field) return true;
+
+    const wrapper = getFieldWrapper(field);
+    const errorSpan = getErrorSpan(field);
+    let message = '';
+
+    if (field.hasAttribute('required') && field.value.trim() === '') {
+      message = 'This field is required.';
+    } else if (field.type === 'email' && field.value.trim() !== '') {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(field.value.trim())) {
+        message = 'Enter a valid email address.';
+      }
+    }
+
+    if (message) {
+      wrapper?.classList.add('is-invalid');
+      if (errorSpan) errorSpan.textContent = message;
+      return false;
+    } else {
+      wrapper?.classList.remove('is-invalid');
+      if (errorSpan) errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  requiredFields.forEach((name) => {
+    const field = getField(name);
+    if (!field) return;
+    field.addEventListener('blur', () => validateField(name));
+    field.addEventListener('input', () => validateField(name));
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    let firstInvalid: HTMLElement | null = null;
+    let allValid = true;
+
+    requiredFields.forEach((name) => {
+      const isValid = validateField(name);
+      if (!isValid && !firstInvalid) {
+        firstInvalid = getField(name);
+      }
+      if (!isValid) allValid = false;
+    });
+
+    if (!allValid) {
+      firstInvalid?.focus();
+      return;
+    }
+
+    const fieldNames = ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'message'];
+    const fields = fieldNames
+      .map((name) => {
+        const field = getField(name);
+        return field ? { name, value: field.value.trim() } : null;
+      })
+      .filter((entry): entry is { name: string; value: string } => entry !== null && entry.value !== '');
+
+    const payload = {
+      fields,
+      context: {
+        pageUri: location.href,
+        pageName: document.title,
+      },
+    };
+
+    try {
+      const response = await fetch(HUBSPOT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        form.hidden = true;
+        if (successPanel) successPanel.hidden = false;
+      } else {
+        if (errorPanel) errorPanel.hidden = false;
+      }
+    } catch {
+      if (errorPanel) errorPanel.hidden = false;
+    }
+  });
+</script>
