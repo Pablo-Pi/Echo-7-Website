@@ -1,0 +1,130 @@
+---
+interface Props {
+  id: string;
+  count?: number;
+  class?: string;
+}
+const { id, count = 70, class: className = '' } = Astro.props;
+---
+<canvas class={`particle-field ${className}`} id={id} data-count={count} aria-hidden="true"></canvas>
+
+<style>
+  .particle-field {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const COLOURS = ['#32FDEA', '#75FD98', '#2BFDD7', '#E8E6F0'];
+
+  function initField(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const count = Number(canvas.dataset.count) || 70;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    let width = 0;
+    let height = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    type Particle = {
+      x: number; y: number; z: number; r: number; vx: number; vy: number; colour: string;
+    };
+
+    let particles: Particle[] = [];
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function seed() {
+      particles = Array.from({ length: count }, () => {
+        const z = Math.random();
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          z,
+          r: 0.6 + z * 2.2,
+          vx: (Math.random() - 0.5) * (0.06 + z * 0.12),
+          vy: (Math.random() - 0.5) * (0.06 + z * 0.12),
+          colour: COLOURS[Math.floor(Math.random() * COLOURS.length)],
+        };
+      });
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        const px = p.x + pointerX * p.z * 14;
+        const py = p.y + pointerY * p.z * 14;
+        ctx!.globalAlpha = 0.18 + p.z * 0.5;
+        ctx!.filter = `blur(${(1 - p.z) * 1.6}px)`;
+        ctx!.fillStyle = p.colour;
+        ctx!.beginPath();
+        ctx!.arc(px, py, p.r, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+      ctx!.globalAlpha = 1;
+      ctx!.filter = 'none';
+    }
+
+    function step() {
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        if (p.y > height + 10) p.y = -10;
+      }
+      draw();
+      raf = requestAnimationFrame(step);
+    }
+
+    let raf = 0;
+
+    resize();
+    seed();
+    draw();
+
+    if (!reduceMotion) {
+      raf = requestAnimationFrame(step);
+    }
+
+    if (isDesktop && !reduceMotion) {
+      const parent = canvas.closest('section') || canvas.parentElement;
+      parent?.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        pointerX = (e as PointerEvent).clientX - rect.left - width / 2;
+        pointerY = (e as PointerEvent).clientY - rect.top - height / 2;
+        pointerX /= width;
+        pointerY /= height;
+      });
+      parent?.addEventListener('pointerleave', () => {
+        pointerX = 0;
+        pointerY = 0;
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      seed();
+      if (reduceMotion) draw();
+    });
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('.particle-field').forEach(initField);
+</script>

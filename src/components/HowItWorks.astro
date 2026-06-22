@@ -1,0 +1,120 @@
+---
+const steps = [
+  {
+    number: '1',
+    title: 'Measure.',
+    body: "The Sovereignty Index™. Fifty questions, five pillars, one number in pounds. You see exactly where your estate stands and what the debt is costing the business. If the number doesn't justify the next step, you stop here — better informed, with a document your board can hold.",
+  },
+  {
+    number: '2',
+    title: 'Rebuild.',
+    body: "The Synapse-7™ Sovereign Vault. Fixed-fee transformation onto a UK-locked, Zero-Trust estate. You watch it built in code, you receive the keys and the Continuity Codex on handover, and data residency is enforced by Azure Policy from day one. We hand over the estate; you own it outright.",
+  },
+  {
+    number: '3',
+    title: 'Stay sovereign.',
+    body: "Managed Sovereignty. Quarterly measurement against your baseline. Board-ready reporting. UK-resident continuity and detection services if you need them — each independently administrable, each yours to take elsewhere. Not a retainer that grows legs. A fixed annual figure.",
+  },
+];
+---
+<section class="howitworks section">
+  <div class="container">
+    <h2 class="howitworks__headline text-column" data-fade>
+      Three phases to success, with the freedom to exit at any time.
+    </h2>
+
+    <div class="howitworks__track">
+      <div class="howitworks__line" aria-hidden="true"></div>
+      {steps.map((step, i) => (
+        <div class="howitworks__step" data-fade style={`--fade-delay:${i * 120}ms`}>
+          <div class="howitworks__number-wrap">
+            <span class="howitworks__number">{step.number}</span>
+          </div>
+          <h3 class="howitworks__title">{step.title}</h3>
+          <p class="howitworks__body">{step.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="howitworks__footnote" data-fade>Each step is a separate decision. We earn the next one.</p>
+  </div>
+</section>
+
+<style>
+  .howitworks__headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 20ch;
+  }
+
+  .howitworks__track {
+    position: relative;
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .howitworks__line {
+    display: none;
+  }
+
+  .howitworks__number-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--colour-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--colour-field);
+    position: relative;
+    z-index: 1;
+  }
+
+  .howitworks__number {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .howitworks__title {
+    margin-top: var(--space-sm);
+    font-size: 1.4rem;
+  }
+
+  .howitworks__body {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.98rem;
+    max-width: 38ch;
+  }
+
+  .howitworks__footnote {
+    margin-top: var(--space-xl);
+    font-size: 0.9rem;
+    color: var(--colour-text-muted);
+    font-style: italic;
+  }
+
+  @media (min-width: 880px) {
+    .howitworks__track {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .howitworks__line {
+      display: block;
+      position: absolute;
+      top: 26px;
+      left: calc(100% / 6);
+      right: calc(100% / 6);
+      height: 1px;
+      background: linear-gradient(90deg, var(--colour-gradient-start), var(--colour-gradient-end));
+      opacity: 0.4;
+      z-index: 0;
+    }
+  }
+</style>

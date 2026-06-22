@@ -1,0 +1,148 @@
+---
+---
+<header class="nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__logo" aria-label="Echo 7 — home">
+      <span class="nav__logo-text">ECHO 7</span>
+      <img src="/images/Logo-icon_Brain.svg" alt="" class="nav__logo-icon" width="44" height="44" />
+    </a>
+
+    <nav class="nav__links" aria-label="Primary" id="nav-links">
+      <a href="/#the-problem">The Problem</a>
+      <a href="/#sovereignty-index">The Sovereignty Index</a>
+      <a href="/#sovereign-vault">The Sovereign Vault</a>
+      <a href="/#why-echo7">Why Echo 7</a>
+      <a href="/insights/">Insights</a>
+      <a href="/contact">Contact</a>
+    </nav>
+
+    <a href="mailto:hello@echo7.io?subject=Measure%20Your%20Technical%20Debt%20Burden" class="btn-primary nav__cta">
+      Measure Your Debt →
+    </a>
+
+    <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(24, 9, 58, 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--colour-hairline);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-block: 0.7rem;
+  }
+
+  .nav__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+  }
+
+  .nav__logo-icon {
+    display: block;
+    height: clamp(34px, 5vw, 44px);
+    width: auto;
+  }
+
+  .nav__logo-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    letter-spacing: 0.12em;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .nav__links {
+    display: none;
+    flex-direction: column;
+    gap: var(--space-sm);
+    font-size: 0.95rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--colour-field);
+    border-bottom: 1px solid var(--colour-hairline);
+    padding: var(--space-md);
+  }
+
+  .nav__links.is-open {
+    display: flex;
+  }
+
+  .nav__links a {
+    text-decoration: none;
+    color: var(--colour-text-muted);
+    transition: color 200ms var(--ease-quiet);
+    white-space: nowrap;
+  }
+
+  .nav__links a:hover,
+  .nav__links a:focus-visible {
+    color: var(--colour-text);
+  }
+
+  .nav__cta {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+    white-space: nowrap;
+  }
+
+  .nav__toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .nav__toggle span {
+    display: block;
+    height: 1.5px;
+    background: var(--colour-text);
+    border-radius: 1px;
+  }
+
+  @media (min-width: 980px) {
+    .nav__links {
+      display: flex;
+      flex-direction: row;
+      position: static;
+      background: none;
+      border-bottom: none;
+      padding: 0;
+    }
+
+    .nav__toggle {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('nav-links');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = links?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  });
+</script>

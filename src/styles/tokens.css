@@ -1,0 +1,41 @@
+/*
+  ECHO 7 DESIGN TOKENS — single source of truth.
+  Change a brand value here and it updates everywhere on the site.
+*/
+:root {
+  /* Colour — Part 2. Do not introduce colours outside this list. */
+  --colour-field: #18093A;          /* deep near-black violet — dominant field */
+  --colour-gradient-start: #32FDEA; /* cyan */
+  --colour-gradient-end: #75FD98;   /* green */
+  --colour-accent: #2BFDD7;         /* accent detail */
+  --colour-text: #E8E6F0;           /* body text on dark, soft off-white */
+  --colour-text-muted: rgba(232, 230, 240, 0.62); /* low-opacity lavender-grey */
+  --colour-hairline: rgba(232, 230, 240, 0.16);
+
+  --gradient-primary: linear-gradient(90deg, var(--colour-gradient-start), var(--colour-gradient-end));
+
+  /* Type — Part 2 */
+  --font-display: 'Michroma', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --leading-body: 1.7;
+  --leading-tight: 1.15;
+
+  /* Spacing rhythm — Part 3 */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 7rem;
+  --space-2xl: 10rem;
+
+  /* Layout */
+  --content-max: 1180px;
+  --text-max: 680px;
+  --radius-sm: 4px;
+  --radius-md: 10px;
+
+  /* Motion */
+  --ease-quiet: cubic-bezier(0.2, 0.65, 0.3, 1);
+  --duration-fade: 700ms;
+}

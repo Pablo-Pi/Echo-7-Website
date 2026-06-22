@@ -1,0 +1,134 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__col">
+      <div class="footer__logo">
+        <span class="footer__logo-text">ECHO 7</span>
+        <img src="/images/Logo-icon_Brain.svg" alt="" class="footer__logo-icon" width="32" height="32" />
+      </div>
+      <p class="footer__tagline">Technical Sovereignty for the UK mid-market.</p>
+      <p class="footer__location">London, UK</p>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__heading">Navigate</h3>
+      <nav class="footer__links">
+        <a href="/#the-problem">The Problem</a>
+        <a href="/#sovereignty-index">The Sovereignty Index</a>
+        <a href="/#sovereign-vault">The Sovereign Vault</a>
+        <a href="/#why-echo7">Why Echo 7</a>
+        <a href="/insights/">Insights</a>
+        <a href="mailto:hello@echo7.io">Contact</a>
+      </nav>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__heading">Connect</h3>
+      <nav class="footer__links">
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://x.com/echo7team" target="_blank" rel="noopener noreferrer">X (@echo7team)</a>
+        <a href="mailto:hello@echo7.io">hello@echo7.io</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container footer__legal">
+    <p>
+      Echo 7 is a trading name of Solvida Ltd. Registered in England and Wales. © {year}.
+      <a href="/privacy/" class="footer__legal-link">Privacy</a>.
+      <a href="/terms/" class="footer__legal-link">Terms</a>.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--colour-hairline);
+    padding-block: var(--space-xl) var(--space-lg);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer__logo-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+  }
+
+  .footer__logo-icon {
+    height: 32px;
+    width: auto;
+  }
+
+  .footer__tagline {
+    margin-top: var(--space-sm);
+    color: var(--colour-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .footer__location {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  .footer__heading {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--colour-text-muted);
+  }
+
+  .footer__links {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer__links a {
+    text-decoration: none;
+    color: var(--colour-text);
+    font-size: 0.92rem;
+    transition: color 200ms var(--ease-quiet);
+  }
+
+  .footer__links a:hover,
+  .footer__links a:focus-visible {
+    color: var(--colour-accent);
+  }
+
+  .footer__legal {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--colour-hairline);
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    opacity: 0.75;
+  }
+
+  .footer__legal-link {
+    text-decoration: underline;
+    color: inherit;
+  }
+
+  @media (min-width: 720px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+</style>

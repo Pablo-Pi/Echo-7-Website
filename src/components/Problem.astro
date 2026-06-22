@@ -1,0 +1,215 @@
+---
+import BreachCostStat from './BreachCostStat.astro';
+---
+<section class="problem section" id="the-problem">
+  <div class="container">
+
+    <div class="problem__intro">
+      <h2 class="problem__headline" data-fade>
+        Your IT estate has a balance sheet. Most firms are ignoring it.
+      </h2>
+      <p class="problem__body" data-fade style="--fade-delay:80ms">
+        Somewhere in your business is an IT estate built up over a decade of decisions
+        nobody fully remembers. It runs. Mostly. And because it runs, nobody has put a
+        number on what it actually costs — in risk, in renewal premiums, in the deal
+        that stalls when a buyer's due diligence team starts asking questions you cannot answer.
+      </p>
+    </div>
+
+    <div class="problem__stats" data-fade style="--fade-delay:160ms">
+      <div class="problem__stat">
+        <p class="problem__stat-number gradient-text">
+          <span data-stat-target="43">0</span>%
+        </p>
+        <p class="problem__stat-caption">
+          of UK businesses experienced a cyber breach in the last twelve months.
+        </p>
+        <p class="problem__stat-source">DSIT Cyber Security Breaches Survey 2025/26</p>
+      </div>
+
+      <div class="problem__stat">
+        <p class="problem__stat-number gradient-text">
+          <span data-stat-target="31">0</span>%
+        </p>
+        <p class="problem__stat-caption">
+          of UK company boards have no named person accountable for cyber risk.
+          When the breach lands, nobody owns it — and your insurers will notice that before you do.
+        </p>
+      </div>
+
+      <div class="problem__stat">
+        <p class="problem__stat-number gradient-text">
+          <span data-stat-target="70">0</span>%
+        </p>
+        <p class="problem__stat-caption">
+          of UK businesses with 50–249 employees experienced a breach last year. The figure is rising year-on-year.
+        </p>
+        <p class="problem__stat-source">DSIT Cyber Security Breaches Survey 2025/26</p>
+      </div>
+
+      <BreachCostStat />
+    </div>
+
+    <div class="problem__outro">
+      <p class="problem__body" data-fade>
+        The provider managing your estate is rarely incentivised to fix this.
+        Hourly billing rewards the problem persisting.
+        Managed-service contracts reward you never leaving.
+      </p>
+
+      <blockquote class="problem__quote" data-fade>
+        <span class="problem__quote-line">"If you can't see it,</span>
+        <span class="problem__quote-line">can't challenge it,</span>
+        <span class="problem__quote-line">and can't leave it —"</span>
+        <span class="problem__quote-punch gradient-text">you don't own it.</span>
+      </blockquote>
+
+      <a href="#sovereignty-index" class="link-subtle" data-fade>Put a number on it →</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .problem__intro,
+  .problem__outro {
+    max-width: var(--text-max);
+  }
+
+  .problem__outro {
+    margin-top: var(--space-lg);
+  }
+
+  .problem__headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 18ch;
+  }
+
+  .problem__body {
+    margin-top: var(--space-lg);
+    font-size: 1.05rem;
+    color: var(--colour-text-muted);
+  }
+
+  .problem__stats {
+    margin-top: var(--space-lg);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--colour-hairline);
+    border-bottom: 1px solid var(--colour-hairline);
+  }
+
+  .problem__stat {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-sm);
+    background: rgba(232, 230, 240, 0.02);
+  }
+
+  .problem__stat-number {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6.5vw, 4.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--gradient-primary);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .problem__stat-caption {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+
+
+  .problem__sub-stat-caption {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.88rem;
+    font-style: italic;
+  }
+
+  .problem__stat-source {
+    margin-top: var(--space-sm);
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .problem__quote {
+    margin: var(--space-lg) 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .problem__quote-line {
+    display: block;
+    color: var(--colour-text-muted);
+  }
+
+  .problem__quote-punch {
+    display: block;
+    margin-top: var(--space-sm);
+    font-size: 1.2em;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 720px) {
+    .problem__stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+    }
+  }
+</style>
+
+<script>
+  function animateCount(el: HTMLElement) {
+    const target = Number(el.dataset.statTarget) || 0;
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now: number) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = String(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stats = document.querySelectorAll<HTMLElement>('[data-stat-target]');
+
+  if (reduceMotion) {
+    stats.forEach((el) => {
+      el.textContent = el.dataset.statTarget || '0';
+    });
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    stats.forEach((el) => observer.observe(el));
+  }
+</script>

@@ -1,0 +1,144 @@
+@import './tokens.css';
+
+/*
+  Michroma is loaded from Google Fonts via BaseLayout for now.
+  If Paul supplies the TTF file, drop it into public/fonts/Michroma-Regular.ttf
+  and add an @font-face rule here to self-host it instead — no other change needed.
+*/
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--colour-field);
+  color: var(--colour-text);
+  font-family: var(--font-body);
+  line-height: var(--leading-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: var(--leading-tight);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.text-column {
+  max-width: var(--text-max);
+}
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--colour-hairline);
+}
+
+.section {
+  padding-block: var(--space-xl);
+}
+
+/* Subtle hairline divider between consecutive sections */
+.section + .section {
+  border-top: 1px solid var(--colour-hairline);
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--gradient-primary);
+  color: var(--colour-field);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius-sm);
+  transition: opacity 200ms var(--ease-quiet), transform 200ms var(--ease-quiet);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.link-subtle {
+  color: var(--colour-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--colour-hairline);
+  padding-bottom: 2px;
+  transition: color 200ms var(--ease-quiet), border-color 200ms var(--ease-quiet);
+}
+
+.link-subtle:hover,
+.link-subtle:focus-visible {
+  color: var(--colour-text);
+  border-color: var(--colour-text-muted);
+}
+
+.btn-primary--glow {
+  box-shadow: 0 0 0 rgba(50, 253, 234, 0);
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(50, 253, 234, 0.22); }
+  50% { box-shadow: 0 0 30px rgba(117, 253, 152, 0.4); }
+}
+
+/* Quiet fade-up on scroll — applied via small client script in BaseLayout */
+[data-fade] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--duration-fade) var(--ease-quiet), transform var(--duration-fade) var(--ease-quiet);
+  transition-delay: var(--fade-delay, 0ms);
+}
+
+[data-fade].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-fade] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .btn-primary--glow {
+    animation: none;
+  }
+}

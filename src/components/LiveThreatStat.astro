@@ -1,0 +1,185 @@
+---
+---
+<div class="problem__stat live-threat-stat" id="live-threat-stat" aria-live="polite">
+  <p class="problem__stat-number gradient-text live-threat-stat__number" aria-label="Loading live threat data">
+    <span id="live-threat-value">—</span>%
+  </p>
+  <p class="problem__stat-caption" id="live-threat-caption">
+    Loading live UK threat data…
+  </p>
+  <p class="problem__stat-source live-threat-stat__source">
+    <span class="live-threat-stat__badge" aria-hidden="true">
+      <span class="live-threat-stat__dot"></span>LIVE
+    </span>
+    CLOUDFLARE RADAR — LIVE DATA
+  </p>
+</div>
+
+<style>
+  .live-threat-stat {
+    /* Inherits .problem__stat layout from Problem.astro parent grid */
+  }
+
+  .live-threat-stat__number {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6.5vw, 4.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+
+  .live-threat-stat__source {
+    margin-top: var(--space-sm);
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .live-threat-stat__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--colour-accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    opacity: 1;
+    border: 1px solid rgba(43, 253, 215, 0.3);
+    border-radius: 2px;
+    padding: 0.1em 0.4em;
+  }
+
+  .live-threat-stat__dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--colour-accent);
+    animation: live-pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(43, 253, 215, 0.6);
+    }
+    50% {
+      opacity: 0.7;
+      box-shadow: 0 0 0 4px rgba(43, 253, 215, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-threat-stat__dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const container = document.getElementById('live-threat-stat');
+    const valueEl = document.getElementById('live-threat-value');
+    const captionEl = document.getElementById('live-threat-caption');
+
+    if (!container || !valueEl || !captionEl) return;
+
+    /**
+     * Attempts to extract a useful percentage from a Cloudflare Radar
+     * layer-7 or layer-3 summary response.
+     *
+     * The Layer 7 summary returns a `httpRequestsPercentageByAttackType` or
+     * top-level `summary_0` object. We look for any key that represents the
+     * fraction of traffic that is attack-related.
+     *
+     * Returns a number (0–100) or null if nothing useful was found.
+     */
+    function extractAttackPercent(data: unknown): number | null {
+      if (!data || typeof data !== 'object') return null;
+
+      // Cloudflare Radar v0 schema: result.summary_0
+      const result = (data as Record<string, unknown>).result;
+      if (!result || typeof result !== 'object') return null;
+
+      const summary = (result as Record<string, unknown>).summary_0;
+      if (!summary || typeof summary !== 'object') return null;
+
+      const s = summary as Record<string, unknown>;
+
+      // Layer 7: keys like "ddos", "clean", "bot", etc.
+      // We want the proportion that is DDoS / attack traffic.
+      const candidateKeys = ['ddos', 'attack', 'DDoS', 'DDOS'];
+      for (const key of candidateKeys) {
+        const val = s[key];
+        if (typeof val === 'string') {
+          const n = parseFloat(val);
+          if (!isNaN(n) && n >= 0 && n <= 100) return Math.round(n * 10) / 10;
+        }
+        if (typeof val === 'number' && val >= 0 && val <= 100) {
+          return Math.round(val * 10) / 10;
+        }
+      }
+
+      // Layer 3: keys like "udp", "tcp" — not percentages of attacks, skip.
+      // Fallback: if there's exactly one numeric value < 20 that could be an
+      // attack share, accept it (heuristic guard against misidentifying clean traffic).
+      const numericVals = Object.values(s)
+        .filter((v): v is string => typeof v === 'string')
+        .map((v) => parseFloat(v))
+        .filter((n) => !isNaN(n) && n > 0 && n < 50);
+
+      if (numericVals.length === 1) return Math.round(numericVals[0] * 10) / 10;
+
+      return null;
+    }
+
+    async function fetchAndRender(): Promise<void> {
+      const endpoints = [
+        'https://radar.cloudflare.com/api/v0/attacks/layer7/summary?dateRange=7d&location=GB&format=json',
+        'https://radar.cloudflare.com/api/v0/attacks/layer3/summary?dateRange=7d&location=GB&format=json',
+      ];
+
+      let percent: number | null = null;
+
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url, {
+            headers: { Accept: 'application/json' },
+            signal: AbortSignal.timeout(8000),
+          });
+
+          if (!res.ok) continue;
+
+          const json = await res.json();
+          percent = extractAttackPercent(json);
+          if (percent !== null) break;
+        } catch {
+          // Network error or CORS — try next endpoint
+        }
+      }
+
+      if (percent === null) {
+        // No useful data — hide the stat entirely rather than show a broken figure
+        container!.style.display = 'none';
+        return;
+      }
+
+      valueEl!.textContent = String(percent);
+      captionEl!.textContent =
+        'of internet traffic targeting UK infrastructure last week was DDoS attack traffic, according to Cloudflare Radar.';
+      container!.removeAttribute('aria-label');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fetchAndRender);
+    } else {
+      fetchAndRender();
+    }
+  })();
+</script>

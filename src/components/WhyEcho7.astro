@@ -1,0 +1,104 @@
+---
+const claims = [
+  {
+    title: 'Fixed-fee certainty.',
+    body: 'You know the number before we start. Not an estimate, not a range — the number. The board signs off once, and that figure does not move. No hourly drift, no scope creep, no invoice that arrives larger than the proposal.',
+  },
+  {
+    title: 'We hand over the keys.',
+    body: "The Continuity Codex documents your exit on the day we arrive, not the day you threaten to leave. You own the tenant, the data and the documentation. The right to leave — at any time, to any provider — is written into the contract from the outset.",
+  },
+  {
+    title: 'We speak boardroom, not server room.',
+    body: 'Risk, debt, liability, control. Your FD will understand every report we produce — not because we have translated the technical into English, but because we built the methodology in the language of the board from the start.',
+  },
+  {
+    title: 'UK sovereignty, enforced.',
+    body: 'Your data stays on UK soil because the platform refuses to move it. Azure Policy enforces that at the infrastructure level. It is not a clause in our contract. It is the architecture.',
+  },
+];
+---
+<section class="whyecho7 section" id="why-echo7">
+  <div class="container">
+    <h2 class="whyecho7__headline text-column" data-fade>
+      Four pillars of value that set us entirely apart from our competitors.
+    </h2>
+
+    <div class="whyecho7__grid">
+      {claims.map((claim, i) => (
+        <div class="whyecho7__claim" data-fade style={`--fade-delay:${i * 90}ms`}>
+          <span class="whyecho7__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 12.5L9.5 18L20 6" fill="none" stroke="url(#wewGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="wewGrad" x1="4" y1="18" x2="20" y2="6"><stop offset="0" stop-color="#32FDEA"/><stop offset="1" stop-color="#75FD98"/></linearGradient></defs></svg>
+          </span>
+          <div>
+            <h3 class="whyecho7__claim-title">{claim.title}</h3>
+            <p class="whyecho7__claim-body">{claim.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="whyecho7__closing text-column" data-fade>
+      Global consultancies cannot do this at your size. MSPs will not hand over the keys —
+      their revenue depends on you never having them. Resellers are paid on your consumption.
+      The combination of fixed fee, full handover, and enforced UK residency is the point.
+      It does not exist elsewhere at this scale.
+    </p>
+  </div>
+</section>
+
+<style>
+  .whyecho7__headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 20ch;
+  }
+
+  .whyecho7__grid {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .whyecho7__claim {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
+  .whyecho7__check {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--colour-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .whyecho7__claim-title {
+    font-size: 1.15rem;
+  }
+
+  .whyecho7__claim-body {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .whyecho7__closing {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--colour-hairline);
+    font-size: 1.05rem;
+    color: var(--colour-text);
+  }
+
+  @media (min-width: 880px) {
+    .whyecho7__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg) var(--space-xl);
+    }
+  }
+</style>

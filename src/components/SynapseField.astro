@@ -1,0 +1,246 @@
+<canvas id="synapse-field" aria-hidden="true"></canvas>
+
+<style>
+  #synapse-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>
+
+<script is:inline>
+(function () {
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('synapse-field');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0;
+  var rafId = null;
+
+  /* ── Icosahedron geometry ─────────────────────────────────────── */
+  var PHI = (1 + Math.sqrt(5)) / 2;
+  var RAW = [
+    [-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0],
+    [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI],
+    [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1]
+  ];
+  var VERTS = RAW.map(function (v) {
+    var l = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+    return [v[0]/l, v[1]/l, v[2]/l];
+  });
+  var EDGES = [
+    [0,1],[0,5],[0,7],[0,10],[0,11],
+    [1,5],[1,7],[1,8],[1,9],
+    [2,3],[2,4],[2,6],[2,10],[2,11],
+    [3,4],[3,6],[3,8],[3,9],
+    [4,5],[4,9],[4,11],
+    [5,9],[5,11],
+    [6,7],[6,8],[6,10],
+    [7,8],[7,10],
+    [8,9],
+    [10,11]
+  ];
+
+  var rotX = 0, rotY = 0, rotZ = 0;
+  var FOCAL = 600;
+
+  function rx(v, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    return [v[0], v[1]*c - v[2]*s, v[1]*s + v[2]*c];
+  }
+  function ry(v, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    return [v[0]*c + v[2]*s, v[1], -v[0]*s + v[2]*c];
+  }
+  function rz(v, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    return [v[0]*c - v[1]*s, v[0]*s + v[1]*c, v[2]];
+  }
+
+  function project(v, cx, cy, radius) {
+    var p = rx(v, rotX); p = ry(p, rotY); p = rz(p, rotZ);
+    var d = p[2] / FOCAL + 1;
+    return [cx + (p[0] / d) * radius, cy + (p[1] / d) * radius];
+  }
+
+  function drawIcosahedron() {
+    var radius = Math.max(W * 0.42, 380);
+    var cx = W * 0.68, cy = H * 0.50;
+    ctx.strokeStyle = 'rgba(50,253,234,0.28)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    for (var i = 0; i < EDGES.length; i++) {
+      var a = project(VERTS[EDGES[i][0]], cx, cy, radius);
+      var b = project(VERTS[EDGES[i][1]], cx, cy, radius);
+      ctx.moveTo(a[0], a[1]);
+      ctx.lineTo(b[0], b[1]);
+    }
+    ctx.stroke();
+  }
+
+  /* ── Synapse nodes ────────────────────────────────────────────── */
+  var NODE_COUNT = 80;
+  var COLOURS = ['#32FDEA', '#75FD98', '#2BFDD7', '#E8E6F0'];
+  var MAX_DIST = 200;
+  var nodes = [];
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function makeNode() {
+    var depth = Math.random();
+    return {
+      x: rand(0, W), y: rand(0, H),
+      vx: rand(-0.28, 0.28), vy: rand(-0.28, 0.28),
+      r: rand(2, 4.5),
+      colour: COLOURS[Math.floor(Math.random() * COLOURS.length)],
+      opacity: rand(0.28, 0.58) * (0.6 + depth * 0.4),
+      depth: depth
+    };
+  }
+
+  function seedNodes() {
+    nodes = [];
+    for (var i = 0; i < NODE_COUNT; i++) nodes.push(makeNode());
+  }
+
+  function drawConnections() {
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var dx = nodes[i].x - nodes[j].x;
+        var dy = nodes[i].y - nodes[j].y;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < MAX_DIST) {
+          var alpha = (0.06 + (1 - dist / MAX_DIST) * 0.18).toFixed(3);
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = 'rgba(50,253,234,' + alpha + ')';
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function drawNodes() {
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.colour;
+      ctx.globalAlpha = n.opacity;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ── Scroll gravity ───────────────────────────────────────────── */
+  var lastScrollY = window.scrollY;
+  var scrollVel = 0;
+  var gravity = 0;
+  var GRAVITY_FACTOR = 0.4;   /* strength per px scrolled */
+  var GRAVITY_DECAY  = 0.96;  /* how slowly gravity fades after scroll stops */
+  var VEL_DECAY      = 0.82;  /* how quickly raw scroll velocity decays per frame */
+
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    var delta = y - lastScrollY;
+    lastScrollY = y;
+    if (delta > 0) scrollVel = Math.max(scrollVel, delta);
+  }, { passive: true });
+
+  /* ── Main loop ────────────────────────────────────────────────── */
+  function tick() {
+    /* update gravity */
+    if (scrollVel > 0.5) {
+      gravity = scrollVel * GRAVITY_FACTOR;
+      scrollVel *= VEL_DECAY;
+    } else {
+      scrollVel = 0;
+      gravity *= GRAVITY_DECAY;
+      if (gravity < 0.01) gravity = 0;
+    }
+
+    /* rotate icosahedron */
+    rotX += 0.0003; rotY += 0.00047; rotZ += 0.00019;
+
+    /* move nodes */
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      n.x += n.vx;
+      n.y += n.vy + gravity;
+      if (n.x < -4) n.x = W + 4;
+      else if (n.x > W + 4) n.x = -4;
+      if (n.y < -4) n.y = H + 4;
+      else if (n.y > H + 4) n.y = -4;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    drawConnections();
+    drawNodes();
+    drawIcosahedron();
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* ── Setup ────────────────────────────────────────────────────── */
+  function resize() {
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width  || window.innerWidth;
+    /* Extend canvas to cover hero + problem section (hero + ~50% more height) */
+    H = Math.round((window.innerHeight * 0.78) + (window.innerHeight * 0.5)) || 1000;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function drawStatic() {
+    ctx.clearRect(0, 0, W, H);
+    drawConnections();
+    drawNodes();
+    drawIcosahedron();
+  }
+
+  function init() {
+    resize();
+    seedNodes();
+    if (reducedMotion) {
+      drawStatic();
+    } else {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  window.addEventListener('resize', function () { resize(); seedNodes(); });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+    } else if (!reducedMotion && rafId === null) {
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+
+  /* Run after full page load, but defer to requestIdleCallback to avoid blocking main thread */
+  function scheduleInit() {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, { timeout: 2000 });
+    } else {
+      setTimeout(init, 100);
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleInit();
+  } else {
+    window.addEventListener('load', scheduleInit);
+  }
+})();
+</script>

@@ -1,0 +1,79 @@
+---
+/**
+ * Quarterly breach cost stat for UK mid-market businesses.
+ *
+ * UPDATE INSTRUCTIONS:
+ * Edit the values below each quarter based on the latest published data
+ * from Ponemon, IBM, NCSC, or BleepingComputer breach cost reports.
+ *
+ * Current figures are conservative mid-market estimates (50–249 employees).
+ * Sources typically publish in Q2 (summer) — update by end of Q3 for accuracy.
+ */
+
+const costFigure = '£3.8m';
+const costCaption = 'average total cost of a data breach for a UK mid-market business (50–249 employees), including incident response, notification, recovery, and regulatory fines.';
+const lastUpdated = 'Q2 2026';
+const attribution = 'Ponemon Institute / IBM Security Data Breach Report';
+---
+
+<div class="problem__stat">
+  <p class="problem__stat-number gradient-text">
+    {costFigure}
+  </p>
+  <p class="problem__stat-caption">
+    {costCaption}
+  </p>
+  <p class="problem__stat-source">
+    <span>{attribution}</span>
+    <span class="breach-cost-stat__update">Updated {lastUpdated}</span>
+  </p>
+</div>
+
+<style>
+  .problem__stat {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-sm);
+    background: rgba(232, 230, 240, 0.02);
+  }
+
+  .problem__stat-number {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6.5vw, 4.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--gradient-primary);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .problem__stat-caption {
+    margin-top: var(--space-xs);
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+
+  .problem__stat-source {
+    margin-top: var(--space-xs);
+    font-size: 0.78rem;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .breach-cost-stat__update {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--colour-text-muted);
+    opacity: 0.6;
+    font-style: italic;
+    text-transform: none;
+    margin-top: 0.3rem;
+  }
+</style>

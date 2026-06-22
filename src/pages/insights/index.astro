@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const articles = (await getCollection('insights')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Insights — Echo 7"
+  description="The methodology behind the Sovereignty Index, the architecture principles behind the Sovereign Vault, and Echo 7's thinking as it develops."
+  canonicalPath="/insights/"
+>
+  <Nav />
+  <main>
+    <section class="section">
+      <div class="container text-column">
+        <h1 class="insights__headline">Insights</h1>
+        <p class="insights__lead">
+          Built in the open. The methodology, the architecture principles, and the
+          scorecard as it develops.
+        </p>
+
+        <ul class="insights__list">
+          {articles.map((article) => (
+            <li>
+              <a href={`/insights/${article.id}/`} class="insights__link">
+                <span class="insights__link-title">{article.data.title}</span>
+                <span class="insights__link-date">
+                  {article.data.publishDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .insights__headline {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+
+  .insights__lead {
+    margin-top: var(--space-md);
+    color: var(--colour-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .insights__list {
+    margin-top: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--colour-hairline);
+  }
+
+  .insights__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--colour-hairline);
+    text-decoration: none;
+    color: var(--colour-text);
+    transition: color 220ms var(--ease-quiet);
+  }
+
+  .insights__link:hover,
+  .insights__link:focus-visible {
+    color: var(--colour-accent);
+  }
+
+  .insights__link-title {
+    font-size: 1.15rem;
+  }
+
+  .insights__link-date {
+    font-size: 0.8rem;
+    color: var(--colour-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

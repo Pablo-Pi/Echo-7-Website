@@ -1,0 +1,60 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  canonicalPath: string;
+}
+
+const { title, description, publishDate, canonicalPath } = Astro.props;
+
+const formattedDate = publishDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} — Echo 7 Insights`} description={description} canonicalPath={canonicalPath}>
+  <Nav />
+  <main>
+    <article class="article section">
+      <div class="container text-column">
+        <p class="article__date">{formattedDate}</p>
+        <h1 class="article__title">{title}</h1>
+        <div class="article__body">
+          <slot />
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .article__date {
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--colour-text-muted);
+  }
+
+  .article__title {
+    margin-top: var(--space-sm);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+  }
+
+  .article__body {
+    margin-top: var(--space-lg);
+    color: var(--colour-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .article__body :global(p) {
+    margin-bottom: var(--space-md);
+  }
+</style>

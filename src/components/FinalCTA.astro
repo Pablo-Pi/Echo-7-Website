@@ -1,0 +1,159 @@
+---
+import ParticleField from './ParticleField.astro';
+---
+<section class="finalcta">
+  <div class="finalcta__bg" aria-hidden="true">
+    <ParticleField id="cta-particles" count={60} class="finalcta__particles" />
+    <div class="finalcta__glow finalcta__glow--bottom"></div>
+    <div class="finalcta__glow finalcta__glow--top"></div>
+    <div class="finalcta__ring"></div>
+  </div>
+
+  <div class="container finalcta__content">
+    <p class="finalcta__eyebrow" data-fade>The longer you wait, the larger the number.</p>
+    <h2 class="finalcta__headline" data-fade style="--fade-delay:60ms">
+      What is your estate <span class="gradient-text">r<span class="finalcta__pound">£</span>ally</span> costing you?
+    </h2>
+    <p class="finalcta__body" data-fade style="--fade-delay:140ms">
+      One conversation. One diagnostic. One number in pounds your board can act on.
+      The businesses that do not measure this are not safe — they are simply uninformed
+      about the exposure they are carrying.
+    </p>
+    <a
+      href="mailto:hello@echo7.io?subject=Measure%20Your%20Technical%20Debt%20Burden"
+      class="btn-primary btn-primary--glow finalcta__btn"
+      data-fade
+      style="--fade-delay:220ms"
+    >
+      Measure your Technical Debt Burden →
+    </a>
+    <p class="finalcta__subline" data-fade style="--fade-delay:300ms">
+      A fixed-fee diagnostic. No obligation beyond it.
+    </p>
+  </div>
+</section>
+
+<style>
+  .finalcta {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-2xl);
+    text-align: center;
+  }
+
+  .finalcta__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .finalcta__particles {
+    opacity: 0.65;
+  }
+
+  .finalcta__glow {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    filter: blur(60px);
+  }
+
+  .finalcta__glow--bottom {
+    width: 70%;
+    height: 200%;
+    bottom: -60%;
+    background: radial-gradient(ellipse, rgba(50, 253, 234, 0.28) 0%, transparent 65%);
+    animation: cta-glow-b 12s ease-in-out infinite;
+  }
+
+  .finalcta__glow--top {
+    width: 50%;
+    height: 160%;
+    top: -50%;
+    background: radial-gradient(ellipse, rgba(117, 253, 152, 0.2) 0%, transparent 65%);
+    animation: cta-glow-t 15s ease-in-out infinite;
+  }
+
+  .finalcta__ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(700px, 90vw);
+    height: min(700px, 90vw);
+    border-radius: 50%;
+    border: 1px solid rgba(50, 253, 234, 0.12);
+    box-shadow:
+      inset 0 0 60px rgba(50, 253, 234, 0.05),
+      0 0 60px rgba(50, 253, 234, 0.05);
+    animation: ring-pulse 8s ease-in-out infinite;
+  }
+
+  @keyframes cta-glow-b {
+    0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+  }
+
+  @keyframes cta-glow-t {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  }
+
+  @keyframes ring-pulse {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.03); }
+  }
+
+  .finalcta__content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .finalcta__eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--colour-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .finalcta__headline {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    line-height: 1.12;
+  }
+
+  .finalcta__body {
+    margin-top: var(--space-md);
+    font-size: 1.2rem;
+    color: var(--colour-text-muted);
+    max-width: 42ch;
+    margin-inline: auto;
+  }
+
+  .finalcta__btn {
+    margin-top: var(--space-lg);
+    font-size: 1.05rem;
+    padding: 1.15rem 2.4rem;
+  }
+
+  .finalcta__subline {
+    margin-top: var(--space-sm);
+    font-size: 0.85rem;
+    color: var(--colour-text-muted);
+    opacity: 0.8;
+  }
+
+  .finalcta__pound {
+    font-size: 0.80em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .finalcta__glow,
+    .finalcta__ring {
+      animation: none;
+    }
+  }
+</style>

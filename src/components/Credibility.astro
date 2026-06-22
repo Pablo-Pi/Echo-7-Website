@@ -1,0 +1,78 @@
+---
+const articles = [
+  { slug: 'the-five-pillars', title: 'The Five Pillars: how we score an estate' },
+  { slug: 'uk-data-residency-enforced', title: "Why “UK data residency” is meaningless unless it's enforced" },
+  { slug: 'the-technical-debt-burden', title: 'The Technical Debt Burden: putting a £ figure on legacy IT' },
+];
+---
+<section class="credibility section">
+  <div class="container">
+    <h2 class="credibility__headline text-column" data-fade>Built in the open.</h2>
+    <p class="credibility__body text-column" data-fade style="--fade-delay:80ms">
+      The existing market produced the problem. We are not going to solve it by operating
+      the same way. We publish the methodology behind the Sovereignty Index™, the
+      architecture principles behind the Sovereign Vault, and our thinking as it develops —
+      because a firm worth trusting with your infrastructure should be able to show its
+      working. We will not offer you invented client logos or anonymous testimonials.
+      Judge us on the work.
+    </p>
+
+    <ul class="credibility__list">
+      {articles.map((article, i) => (
+        <li data-fade style={`--fade-delay:${160 + i * 80}ms`}>
+          <a href={`/insights/${article.slug}/`} class="credibility__link">
+            <span>{article.title}</span>
+            <span class="credibility__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .credibility__headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .credibility__body {
+    margin-top: var(--space-md);
+    color: var(--colour-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .credibility__list {
+    margin-top: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--colour-hairline);
+  }
+
+  .credibility__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--colour-hairline);
+    text-decoration: none;
+    color: var(--colour-text);
+    font-size: 1.1rem;
+    transition: color 220ms var(--ease-quiet), padding-left 220ms var(--ease-quiet);
+  }
+
+  .credibility__link:hover,
+  .credibility__link:focus-visible {
+    color: var(--colour-accent);
+    padding-left: 0.4rem;
+  }
+
+  .credibility__arrow {
+    color: var(--colour-text-muted);
+    transition: transform 220ms var(--ease-quiet);
+  }
+
+  .credibility__link:hover .credibility__arrow {
+    transform: translateX(4px);
+  }
+</style>
