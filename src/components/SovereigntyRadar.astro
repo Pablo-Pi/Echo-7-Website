@@ -21,7 +21,7 @@ const sovereign = [88, 82, 90, 92, 78];
     <svg
       id="sov-radar-svg"
       class="sov-radar"
-      viewBox="0 0 520 440"
+      viewBox="0 0 620 340"
       preserveAspectRatio="xMidYMid meet"
       role="img"
       aria-label="Radar chart comparing a typical uninspected IT estate against the Echo 7 sovereign benchmark across five pillars: Identity, Velocity, Resilience, Security, Cognitive"
@@ -43,7 +43,7 @@ const sovereign = [88, 82, 90, 92, 78];
   </div>
 
   <p class="sov-radar__footnote">
-    A representative illustration. Your actual Sovereignty Index scores are produced by the
+    A representative illustration. Your actual Sovereignty Index scores are produced by our
     diagnostic engagement.
   </p>
 </div>
@@ -58,9 +58,10 @@ const sovereign = [88, 82, 90, 92, 78];
     var uninspected = JSON.parse(svg.getAttribute('data-uninspected'));
     var sovereign = JSON.parse(svg.getAttribute('data-sovereign'));
 
-    var cx = 260;
-    var cy = 205;
-    var radius = 140;
+    var cx = 310;
+    var cy = 170;
+    var radiusX = 220;
+    var radiusY = 110;
     var count = pillars.length;
 
     function angleFor(i) {
@@ -69,10 +70,10 @@ const sovereign = [88, 82, 90, 92, 78];
 
     function pointFor(i, value) {
       var ang = angleFor(i);
-      var r = (radius * value) / 100;
+      var scale = value / 100;
       return {
-        x: cx + r * Math.cos(ang),
-        y: cy + r * Math.sin(ang)
+        x: cx + radiusX * scale * Math.cos(ang),
+        y: cy + radiusY * scale * Math.sin(ang)
       };
     }
 
@@ -122,9 +123,10 @@ const sovereign = [88, 82, 90, 92, 78];
     var labelGroup = makeEl('g', { class: 'sov-radar__labels' });
     for (var l = 0; l < count; l++) {
       var ang = angleFor(l);
-      var labelR = radius + 28;
-      var lx = cx + labelR * Math.cos(ang);
-      var ly = cy + labelR * Math.sin(ang);
+      var labelRX = radiusX + 45;
+      var labelRY = radiusY + 30;
+      var lx = cx + labelRX * Math.cos(ang);
+      var ly = cy + labelRY * Math.sin(ang);
       var cosVal = Math.cos(ang);
       var anchor = 'middle';
       if (cosVal > 0.3) anchor = 'start';
@@ -210,7 +212,7 @@ const sovereign = [88, 82, 90, 92, 78];
 <style>
   .sov-radar-wrap {
     margin: var(--space-xl) auto 0;
-    max-width: 598px;
+    max-width: 700px;
     padding: var(--space-md);
     border: 1px solid var(--colour-hairline);
     border-radius: var(--radius-md);
