@@ -36,6 +36,8 @@ Cognitive measures how well the organisation actually understands its own estate
 
 In a typical uninspected estate, the real knowledge of how things work lives with a single long-serving administrator or an external contractor, and documentation, where it exists at all, is years out of date. The sovereign benchmark holds that knowledge in accessible, current records, so the organisation does not face an existential risk every time a key individual is unavailable or leaves.
 
+> A single overall score would hide exactly the detail a board needs to act on.
+
 ## How the pillars come together
 
 No estate scores identically across all five. A business might have strong Security but weak Velocity, or solid Resilience undermined by poor Identity controls. That is the point of separating them: a single combined score would average away the very weaknesses that need attention first.

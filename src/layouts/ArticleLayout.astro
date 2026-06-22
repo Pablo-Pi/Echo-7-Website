@@ -3,21 +3,31 @@ import BaseLayout from './BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
 interface Props {
   title: string;
   description: string;
   publishDate: Date;
   canonicalPath: string;
   backLink?: { href: string; label: string };
+  headings?: Heading[];
+  readTimeMinutes?: number;
 }
 
-const { title, description, publishDate, canonicalPath, backLink } = Astro.props;
+const { title, description, publishDate, canonicalPath, backLink, headings, readTimeMinutes } = Astro.props;
 
 const formattedDate = publishDate.toLocaleDateString('en-GB', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
 });
+
+const showToc = headings && headings.length > 1;
 ---
 
 <BaseLayout title={`${title} — Echo 7 Insights`} description={description} canonicalPath={canonicalPath}>
@@ -28,11 +38,32 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
         {backLink && (
           <a href={backLink.href} class="article__back link-subtle">← {backLink.label}</a>
         )}
-        <p class="article__date">{formattedDate}</p>
+        <p class="article__date">
+          {formattedDate}
+          {readTimeMinutes && <span class="article__readtime"> · {readTimeMinutes} min read</span>}
+        </p>
         <h1 class="article__title">{title}</h1>
+
+        {showToc && (
+          <nav class="article__toc" aria-label="Sections in this article">
+            <p class="article__toc-label">On this page</p>
+            <ul class="article__toc-list">
+              {headings.map((h) => (
+                <li><a href={`#${h.slug}`} class="article__toc-link">{h.text}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         <div class="article__body">
           <slot />
         </div>
+
+        <div class="article__cta">
+          <p class="article__cta-text">See where your own estate would score against this.</p>
+          <a href="/contact" class="btn-primary">Start with the Index →</a>
+        </div>
+
         <div class="article__footer-nav">
           <a href="/insights/" class="link-subtle">← Back to Insights</a>
         </div>
@@ -56,9 +87,52 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
     color: var(--colour-text-muted);
   }
 
+  .article__readtime {
+    opacity: 0.75;
+  }
+
   .article__title {
     margin-top: var(--space-sm);
     font-size: clamp(1.8rem, 4vw, 2.8rem);
+  }
+
+  .article__toc {
+    margin-top: var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-sm);
+    background: rgba(232, 230, 240, 0.02);
+  }
+
+  .article__toc-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--colour-text-muted);
+    opacity: 0.7;
+  }
+
+  .article__toc-list {
+    margin-top: 0.5rem;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+  }
+
+  .article__toc-link {
+    color: var(--colour-text-muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms var(--ease-quiet), border-color 200ms var(--ease-quiet);
+  }
+
+  .article__toc-link:hover,
+  .article__toc-link:focus-visible {
+    color: var(--colour-accent);
+    border-color: var(--colour-accent);
   }
 
   .article__body {
@@ -113,6 +187,36 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
   .article__body :global(a:hover),
   .article__body :global(a:focus-visible) {
     text-decoration-color: var(--colour-accent);
+  }
+
+  .article__body :global(blockquote) {
+    margin: var(--space-lg) 0;
+    padding-left: var(--space-md);
+    border-left: 3px solid var(--colour-accent);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: var(--colour-text);
+  }
+
+  .article__body :global(blockquote p) {
+    margin-bottom: 0;
+  }
+
+  .article__cta {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
+    border: 1px solid var(--colour-hairline);
+    border-radius: var(--radius-md);
+    background: linear-gradient(160deg, rgba(43, 253, 215, 0.05), transparent 60%);
+    text-align: center;
+  }
+
+  .article__cta-text {
+    font-size: 1.05rem;
+    color: var(--colour-text);
+    margin-bottom: var(--space-md);
   }
 
   .article__footer-nav {

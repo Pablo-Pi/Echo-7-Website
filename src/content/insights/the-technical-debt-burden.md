@@ -12,6 +12,8 @@ Technical Debt Burden is the term we use for the gap between what an estate woul
 
 The reason boards do not see it is structural. Emergency remediation gets coded as a one-off project cost. Insurance increases get absorbed into the general insurance line. Lost deals do not appear on any IT report at all, because nobody thinks to ask why a deal was lost. Each line item looks small and explainable on its own. Added together, they tell a very different story.
 
+> Add the line items together, and the number stops being abstract.
+
 ## Four concrete sources of cost
 
 **Emergency remediation.** When something breaks that should have been caught by routine maintenance, the fix tends to happen under pressure, out of hours, at premium rates. A single serious incident, such as a failed server migration discovered only when it takes down email for two days, can easily cost £40,000 to £60,000 once you include contractor day rates, lost productivity and the inevitable rush charges.

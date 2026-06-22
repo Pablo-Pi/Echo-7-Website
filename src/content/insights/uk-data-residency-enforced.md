@@ -26,6 +26,8 @@ Our approach is to enforce residency through policy, not to rely on it being pro
 
 The value of this approach is that it removes a category of risk rather than managing it. A contractual promise needs to be checked, renewed, and trusted. A policy-enforced control needs to be configured correctly once, and then it simply holds, regardless of what any individual engineer, subcontractor, or software default tries to do next.
 
+> A promise needs to be checked, renewed, and trusted. A policy simply holds, regardless of what anyone tries next.
+
 ## The question worth asking
 
 If your current provider tells you your data stays in the UK, the right follow-up question is not "are you sure," it is "what technically prevents it from leaving." If the answer is a clause rather than a control, you have a promise. A promise is worth having. It is just not the same thing as an enforcement mechanism, and for data that falls under GDPR, NHS handling requirements, or FCA oversight, the difference is exactly the gap that a determined regulator, or a determined attacker, will go looking for.
