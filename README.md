@@ -127,19 +127,9 @@ The site is a static build — just HTML, CSS, and JS. No database or backend ne
    - **SFTP** (faster for large sites)
    - **GitHub Actions** (if you set up CI/CD)
 
-4. Ensure `.htaccess` or equivalent server config allows clean URLs (no `.html` extensions needed):
-   ```apache
-   <IfModule mod_rewrite.c>
-     RewriteEngine On
-     RewriteBase /
-     RewriteRule ^index\.html$ - [L]
-     RewriteCond %{REQUEST_FILENAME} !-f
-     RewriteCond %{REQUEST_FILENAME} !-d
-     RewriteRule . /index.html [L]
-   </IfModule>
-   ```
+4. A `.htaccess` file is already included in `public/.htaccess` and gets copied into every build automatically. It only sets a custom 404 page — no rewrite rules are needed, because Astro already builds each route as its own `/page/index.html`, which Apache serves natively as a clean URL with no extension.
 
-5. Test the live site. Check `/insights/` links and all CTAs work.
+5. Test the live site. Check `/insights/` links, all CTAs, and a deliberately broken URL (to confirm the custom 404 page shows) all work.
 
 ## Project Structure
 

@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Page Not Found — Echo 7"
+  description="This page does not exist or has moved."
+  canonicalPath="/404"
+>
+  <Nav />
+  <main>
+    <section class="section notfound">
+      <div class="container text-column">
+        <p class="notfound__eyebrow">404</p>
+        <h1 class="notfound__headline">This page does not exist.</h1>
+        <p class="notfound__body">
+          It may have moved, or the link you followed is out of date. Try the homepage,
+          or head straight to the Insights articles below.
+        </p>
+        <div class="notfound__links">
+          <a href="/" class="btn-primary">Back to homepage →</a>
+          <a href="/insights/" class="link-subtle">Browse Insights</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .notfound {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .notfound__eyebrow {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--colour-accent);
+    line-height: 1;
+  }
+
+  .notfound__headline {
+    margin-top: var(--space-sm);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  .notfound__body {
+    margin-top: var(--space-md);
+    color: var(--colour-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .notfound__links {
+    margin-top: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+</style>
