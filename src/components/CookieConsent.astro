@@ -209,4 +209,12 @@
     localStorage.setItem(STORAGE_KEY, 'denied');
     hideBanner();
   });
+
+  const settingsLink = document.getElementById('cookie-settings-link') as HTMLAnchorElement | null;
+  settingsLink?.addEventListener('click', (event) => {
+    event.preventDefault();
+    localStorage.removeItem(STORAGE_KEY);
+    showBanner();
+    banner?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 </script>
