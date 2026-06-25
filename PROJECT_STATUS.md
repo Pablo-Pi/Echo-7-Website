@@ -18,7 +18,7 @@ This is the standing handover document for the Echo 7 website project (echo7.io)
 - `/contact/` — lead capture form (HubSpot Forms API integration), redirects to `/contact/thank-you/` on success
 - `/insights/` — articles index
 - `/insights/the-five-pillars/`, `/insights/the-technical-debt-burden/`, `/insights/uk-data-residency-enforced/` — three published articles, each with an auto-generated table of contents, estimated read time, a pull-quote, and a closing CTA card driving back to `/contact/`
-- `/privacy/` — full UK GDPR-compliant draft (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433). Registered office address is intentionally left as a visibly-flagged placeholder pending confirmation from Companies House. Still flagged "pending legal review" on-page.
+- `/privacy/` — full UK GDPR-compliant draft (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433, registered office at 124 City Road, London, EC1V 2NX). Still flagged "pending legal review" on-page.
 - `/terms/` — drafted, flagged "pending legal review" on-page. Do not treat either legal page as final or quote from it as settled policy until that review happens.
 - `/404` — custom not-found page
 
@@ -54,7 +54,6 @@ If you're documenting or writing anything brand-facing, follow `BRAND.md` exactl
 ## Known open items — do not assume these are done
 
 - Privacy and terms pages need actual legal review before being considered final
-- Registered office address on the privacy policy is a placeholder pending confirmation from Companies House
 - Google Search Console hasn't been set up/verified yet, and the sitemap hasn't been submitted to Google
 - GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — not urgent, but should eventually be consolidated under one Solvida Ltd account structure
 - No analytics dashboard or reporting cadence has been set up yet — GA4 only collects data for visitors who accept the cookie banner
