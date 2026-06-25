@@ -13,9 +13,6 @@ import Footer from '../components/Footer.astro';
   <main>
     <section class="section">
       <div class="container text-column legal">
-        <p class="legal__draft-notice">
-          Draft — pending legal review before this page is considered final.
-        </p>
         <h1>Terms of Use</h1>
         <p class="legal__updated">Last updated: 25 June 2026</p>
 
@@ -109,16 +106,6 @@ import Footer from '../components/Footer.astro';
     padding-block: var(--space-md);
   }
 
-  .legal__draft-notice {
-    display: inline-block;
-    margin-bottom: var(--space-md);
-    padding: 0.4rem 0.8rem;
-    border: 1px solid var(--colour-accent);
-    border-radius: var(--radius-sm);
-    color: var(--colour-accent);
-    font-size: 0.82rem;
-    letter-spacing: 0.03em;
-  }
 
   .legal h1 {
     font-size: clamp(1.8rem, 4vw, 2.6rem);

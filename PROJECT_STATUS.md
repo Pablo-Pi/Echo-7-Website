@@ -18,8 +18,8 @@ This is the standing handover document for the Echo 7 website project (echo7.io)
 - `/contact/` — lead capture form (HubSpot Forms API integration), redirects to `/contact/thank-you/` on success
 - `/insights/` — articles index
 - `/insights/the-five-pillars/`, `/insights/the-technical-debt-burden/`, `/insights/uk-data-residency-enforced/` — three published articles, each with an auto-generated table of contents, estimated read time, a pull-quote, and a closing CTA card driving back to `/contact/`
-- `/privacy/` — full UK GDPR-compliant draft (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433, registered office at 124 City Road, London, EC1V 2NX). Still flagged "pending legal review" on-page.
-- `/terms/` — full draft (liability, third-party links, governing law, IP, no-advice disclaimer). Still flagged "pending legal review" on-page. Do not treat either legal page as final or quote from it as settled policy until that review happens.
+- `/privacy/` — full UK GDPR-compliant policy (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433, registered office at 124 City Road, London, EC1V 2NX). **Legally reviewed and approved — no longer a draft.**
+- `/terms/` — full terms of use (liability, third-party links, governing law, IP, no-advice disclaimer). **Legally reviewed and approved — no longer a draft.**
 - `/404` — custom not-found page
 
 ## Brand and content rules — read this before writing anything
@@ -50,12 +50,18 @@ If you're documenting or writing anything brand-facing, follow `BRAND.md` exactl
 - Built a cookie consent banner (Accept/Reject, branded with wordmark + icon in the correct order) and gated GA4 behind it — GA4 previously fired unconditionally on every page load with no consent mechanism, which was a real PECR/UK GDPR compliance gap
 - Replaced the placeholder privacy policy with a full UK GDPR-compliant draft supplied by the business owner
 - Added a working "Cookie settings" link in the footer that reopens the consent banner, resolving the privacy policy's cookie-related placeholders with a real mechanism rather than dead text
+- Privacy policy and terms of use have both passed legal review — removed the "Draft, pending legal review" banners from both pages and the now-unused CSS for that notice
+- Audited the live site directly (not from memory) and found: the sitemap was listing `/contact/thank-you/` despite it being `noindex`, there's no `robots.txt`, no Organization JSON-LD structured data, and no `apple-touch-icon`/web manifest — none fixed yet, see open items below
 
 ## Known open items — do not assume these are done
 
-- Privacy and terms pages need actual legal review before being considered final
+- **Technical SEO gaps found in a 25 June 2026 audit, not yet fixed:**
+  - Sitemap includes `/contact/thank-you/` even though that page is `noindex` — should be excluded
+  - No `robots.txt`
+  - No Organization JSON-LD structured data
+  - No `apple-touch-icon` or web manifest (iOS home-screen icon, etc.)
 - Google Search Console hasn't been set up/verified yet, and the sitemap hasn't been submitted to Google
-- GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — not urgent, but should eventually be consolidated under one Solvida Ltd account structure
+- GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — explicitly **not urgent** per business owner
 - No analytics dashboard or reporting cadence has been set up yet — GA4 only collects data for visitors who accept the cookie banner
 
 ## Deploy checklist (every time)
