@@ -47,6 +47,29 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     <meta name="twitter:image" content="https://echo7.io/images/og-image.png" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Echo 7',
+      legalName: 'Solvida Ltd',
+      url: 'https://echo7.io',
+      logo: 'https://echo7.io/images/Logo-icon_Brain.svg',
+      email: 'hello@echo7.io',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '124 City Road',
+        addressLocality: 'London',
+        postalCode: 'EC1V 2NX',
+        addressCountry: 'GB',
+      },
+      sameAs: [
+        'https://www.linkedin.com/company/echo7io',
+        'https://x.com/echo7team',
+      ],
+    })} />
   </head>
   <body>
     <slot />
