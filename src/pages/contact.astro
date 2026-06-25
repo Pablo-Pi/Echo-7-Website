@@ -115,16 +115,8 @@ import Footer from '../components/Footer.astro';
               We will only use your details to respond to your enquiry.
             </p>
 
-            <button type="submit" class="btn-primary contact__submit">Send your message →</button>
+            <button type="submit" id="contact-submit" class="btn-primary contact__submit">Send your message →</button>
           </form>
-
-          <div id="contact-success" class="contact__panel contact__panel--success" hidden>
-            <h2>Thank you.</h2>
-            <p>
-              Your message has reached us. We review every submission and will come back
-              to you within one working day.
-            </p>
-          </div>
 
           <div id="contact-error" class="contact__panel contact__panel--error" hidden>
             <h2>Something went wrong.</h2>
@@ -267,6 +259,11 @@ import Footer from '../components/Footer.astro';
     margin-top: var(--space-xs);
   }
 
+  .contact__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   .contact__panel {
     border: 1px solid var(--colour-hairline);
     border-radius: var(--radius-md);
@@ -352,8 +349,8 @@ import Footer from '../components/Footer.astro';
   const HUBSPOT_ENDPOINT = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_GUID}`;
 
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
-  const successPanel = document.getElementById('contact-success') as HTMLElement | null;
   const errorPanel = document.getElementById('contact-error') as HTMLElement | null;
+  const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
 
   const requiredFields = ['email', 'company', 'message'];
 
@@ -440,6 +437,12 @@ import Footer from '../components/Footer.astro';
       },
     };
 
+    if (errorPanel) errorPanel.hidden = true;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+    }
+
     try {
       const response = await fetch(HUBSPOT_ENDPOINT, {
         method: 'POST',
@@ -448,13 +451,20 @@ import Footer from '../components/Footer.astro';
       });
 
       if (response.ok) {
-        form.hidden = true;
-        if (successPanel) successPanel.hidden = false;
+        window.location.href = '/contact/thank-you/';
       } else {
         if (errorPanel) errorPanel.hidden = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send your message →';
+        }
       }
     } catch {
       if (errorPanel) errorPanel.hidden = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send your message →';
+      }
     }
   });
 </script>
