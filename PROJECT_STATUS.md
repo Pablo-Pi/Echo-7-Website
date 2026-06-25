@@ -51,15 +51,14 @@ If you're documenting or writing anything brand-facing, follow `BRAND.md` exactl
 - Replaced the placeholder privacy policy with a full UK GDPR-compliant draft supplied by the business owner
 - Added a working "Cookie settings" link in the footer that reopens the consent banner, resolving the privacy policy's cookie-related placeholders with a real mechanism rather than dead text
 - Privacy policy and terms of use have both passed legal review — removed the "Draft, pending legal review" banners from both pages and the now-unused CSS for that notice
-- Audited the live site directly (not from memory) and found: the sitemap was listing `/contact/thank-you/` despite it being `noindex`, there's no `robots.txt`, no Organization JSON-LD structured data, and no `apple-touch-icon`/web manifest — none fixed yet, see open items below
+- Audited the live site directly (not from memory) and found four technical SEO gaps, then fixed all of them same day:
+  - Sitemap was listing `/contact/thank-you/` despite it being `noindex` — now excluded via a filter in `astro.config.mjs`
+  - Added `public/robots.txt`, pointing crawlers at the sitemap
+  - Added Organization JSON-LD structured data to `BaseLayout.astro` (name, legal name, registered address, logo, LinkedIn/X profiles)
+  - Added `apple-touch-icon.png` (180×180) and a web manifest (`site.webmanifest`) with 192/512px icons — generated from the brand icon SVG via macOS `sips`, padded with the brand background colour to make them square since the source icon isn't
 
 ## Known open items — do not assume these are done
 
-- **Technical SEO gaps found in a 25 June 2026 audit, not yet fixed:**
-  - Sitemap includes `/contact/thank-you/` even though that page is `noindex` — should be excluded
-  - No `robots.txt`
-  - No Organization JSON-LD structured data
-  - No `apple-touch-icon` or web manifest (iOS home-screen icon, etc.)
 - Google Search Console hasn't been set up/verified yet, and the sitemap hasn't been submitted to Google
 - GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — explicitly **not urgent** per business owner
 - No analytics dashboard or reporting cadence has been set up yet — GA4 only collects data for visitors who accept the cookie banner
