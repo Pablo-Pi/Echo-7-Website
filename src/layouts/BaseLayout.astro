@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import CookieConsent from '../components/CookieConsent.astro';
 
 interface Props {
   title: string;
@@ -46,18 +47,11 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     <meta name="twitter:image" content="https://echo7.io/images/og-image.png" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RPS18TFKV"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1RPS18TFKV');
-    </script>
   </head>
   <body>
     <slot />
+
+    <CookieConsent />
 
     <script>
       const fadeEls = document.querySelectorAll('[data-fade]');
