@@ -59,7 +59,7 @@ If you're documenting or writing anything brand-facing, follow `BRAND.md` exactl
 
 ## Known open items — do not assume these are done
 
-- Google Search Console hasn't been set up/verified yet, and the sitemap hasn't been submitted to Google
+- Google Search Console is verified for https://echo7.io/ and the sitemap (sitemap-index.xml) has been submitted — 25 June 2026.
 - GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — explicitly **not urgent** per business owner
 - No analytics dashboard or reporting cadence has been set up yet — GA4 only collects data for visitors who accept the cookie banner
 
