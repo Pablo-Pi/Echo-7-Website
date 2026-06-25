@@ -68,6 +68,8 @@ All files live in `public/images/` in the project repo, and are bundled together
 
 **Logo rule:** never recolour the gradient, never place the full-colour icon mark on anything other than the `#18093A` field (use the BW variants for light backgrounds instead), never stretch or distort the lockup's proportions.
 
+**Lockup order — this is fixed and must never be reversed:** the wordmark "ECHO 7" always comes first, with the brain icon following immediately after it (to the right, same horizontal row). Never put the icon before the wordmark, and never stack them vertically (icon above text) — this is treated as a misrepresentation of the company's identity, not just a style preference. The canonical reference is the site's own navigation bar (`src/components/Nav.astro`): wordmark span, then icon image, in that order, side by side. Any new component that includes the logo lockup must match this exact order and orientation.
+
 ---
 
 ## 6. Voice and tone
