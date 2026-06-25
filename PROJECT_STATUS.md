@@ -19,7 +19,7 @@ This is the standing handover document for the Echo 7 website project (echo7.io)
 - `/insights/` — articles index
 - `/insights/the-five-pillars/`, `/insights/the-technical-debt-burden/`, `/insights/uk-data-residency-enforced/` — three published articles, each with an auto-generated table of contents, estimated read time, a pull-quote, and a closing CTA card driving back to `/contact/`
 - `/privacy/` — full UK GDPR-compliant draft (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433, registered office at 124 City Road, London, EC1V 2NX). Still flagged "pending legal review" on-page.
-- `/terms/` — drafted, flagged "pending legal review" on-page. Do not treat either legal page as final or quote from it as settled policy until that review happens.
+- `/terms/` — full draft (liability, third-party links, governing law, IP, no-advice disclaimer). Still flagged "pending legal review" on-page. Do not treat either legal page as final or quote from it as settled policy until that review happens.
 - `/404` — custom not-found page
 
 ## Brand and content rules — read this before writing anything
