@@ -18,7 +18,8 @@ This is the standing handover document for the Echo 7 website project (echo7.io)
 - `/contact/` — lead capture form (HubSpot Forms API integration), redirects to `/contact/thank-you/` on success
 - `/insights/` — articles index
 - `/insights/the-five-pillars/`, `/insights/the-technical-debt-burden/`, `/insights/uk-data-residency-enforced/` — three published articles, each with an auto-generated table of contents, estimated read time, a pull-quote, and a closing CTA card driving back to `/contact/`
-- `/privacy/` and `/terms/` — **drafted but explicitly flagged "pending legal review"** on-page. Do not treat this content as final or quote from it as settled policy.
+- `/privacy/` — full UK GDPR-compliant draft (lawful basis table, retention periods, international transfers, ICO complaints route, company number 7232433). Registered office address is intentionally left as a visibly-flagged placeholder pending confirmation from Companies House. Still flagged "pending legal review" on-page.
+- `/terms/` — drafted, flagged "pending legal review" on-page. Do not treat either legal page as final or quote from it as settled policy until that review happens.
 - `/404` — custom not-found page
 
 ## Brand and content rules — read this before writing anything
@@ -44,13 +45,19 @@ If you're documenting or writing anything brand-facing, follow `BRAND.md` exactl
 - Drafted privacy and terms pages (flagged for legal review) so existing footer/contact links stop 404ing
 - Cleaned up an accidentally-committed duplicate `node_modules` folder (5,500+ junk files) from git history
 - Diagnosed and permanently fixed an iCloud Drive sync issue that was causing the project folder to behave unpredictably during builds
+- Added a `noindex` meta tag to the contact thank-you page (transient confirmation page, shouldn't be indexed)
+- Fixed the cookie banner's logo lockup order (was reversed — icon before wordmark, stacked vertically). Documented the correct order as a hard rule in `BRAND.md` so it can't be gotten wrong again
+- Built a cookie consent banner (Accept/Reject, branded with wordmark + icon in the correct order) and gated GA4 behind it — GA4 previously fired unconditionally on every page load with no consent mechanism, which was a real PECR/UK GDPR compliance gap
+- Replaced the placeholder privacy policy with a full UK GDPR-compliant draft supplied by the business owner
+- Added a working "Cookie settings" link in the footer that reopens the consent banner, resolving the privacy policy's cookie-related placeholders with a real mechanism rather than dead text
 
 ## Known open items — do not assume these are done
 
 - Privacy and terms pages need actual legal review before being considered final
+- Registered office address on the privacy policy is a placeholder pending confirmation from Companies House
 - Google Search Console hasn't been set up/verified yet, and the sitemap hasn't been submitted to Google
 - GA4 has two separate, un-merged accounts (echo7.io and solvida.co.uk) — not urgent, but should eventually be consolidated under one Solvida Ltd account structure
-- No analytics dashboard or reporting cadence has been set up yet — GA4 is just collecting data right now
+- No analytics dashboard or reporting cadence has been set up yet — GA4 only collects data for visitors who accept the cookie banner
 
 ## Deploy checklist (every time)
 
