@@ -5,9 +5,10 @@ interface Props {
   title: string;
   description: string;
   canonicalPath?: string;
+  noindex?: boolean;
 }
 
-const { title, description, canonicalPath = '/' } = Astro.props;
+const { title, description, canonicalPath = '/', noindex = false } = Astro.props;
 const canonicalURL = new URL(canonicalPath, Astro.site);
 ---
 
@@ -19,6 +20,7 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
