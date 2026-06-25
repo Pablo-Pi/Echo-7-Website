@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy — Echo 7"
+  description="Echo 7 privacy policy. Solvida Ltd trading as Echo 7, registered in England and Wales."
+  canonicalPath="/privacy/"
+>
+  <Nav />
+  <main>
+    <section class="section">
+      <div class="container text-column legal">
+        <p class="legal__draft-notice">
+          Draft — pending legal review before this page is considered final.
+        </p>
+        <h1>Privacy Policy</h1>
+        <p class="legal__updated">Last updated: 22 June 2026</p>
+
+        <p>
+          Echo 7 is a trading name of Solvida Ltd, a company registered in England and Wales.
+          This policy explains what information we collect when you use this website or get
+          in touch with us, and how we use it.
+        </p>
+
+        <h2>What we collect</h2>
+        <p>
+          When you submit the contact form on this site, we collect the information you
+          provide directly: your name, business email address, phone number (if given),
+          company name, job title (if given), and the message you write to us. We also
+          collect standard analytics data about how visitors use this site, such as pages
+          viewed and general location, via Google Analytics.
+        </p>
+
+        <h2>How we use it</h2>
+        <p>
+          Contact form submissions are used solely to respond to your enquiry. We do not
+          sell, rent, or share your information with third parties for marketing purposes.
+          Analytics data is used in aggregate to understand how the site is used and to
+          improve it.
+        </p>
+
+        <h2>Where it is stored</h2>
+        <p>
+          Contact form submissions are stored in our customer relationship management
+          system. Analytics data is processed by Google Analytics in line with Google's
+          own privacy policy.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          Under UK GDPR, you have the right to ask what personal data we hold about you,
+          to request its correction or deletion, and to object to how it is processed.
+          To exercise any of these rights, contact us at
+          <a href="mailto:hello@echo7.io">hello@echo7.io</a>.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about this policy can be sent to
+          <a href="mailto:hello@echo7.io">hello@echo7.io</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-block: var(--space-md);
+  }
+
+  .legal__draft-notice {
+    display: inline-block;
+    margin-bottom: var(--space-md);
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--colour-accent);
+    border-radius: var(--radius-sm);
+    color: var(--colour-accent);
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+  }
+
+  .legal h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .legal__updated {
+    margin-top: var(--space-sm);
+    color: var(--colour-text-muted);
+    font-size: 0.85rem;
+  }
+
+  .legal h2 {
+    margin-top: var(--space-lg);
+    font-size: 1.3rem;
+    color: var(--colour-accent);
+  }
+
+  .legal p {
+    margin-top: var(--space-sm);
+    color: var(--colour-text-muted);
+    line-height: 1.7;
+  }
+
+  .legal a {
+    color: var(--colour-accent);
+  }
+</style>

@@ -1,6 +1,6 @@
 ---
 title: "The Five Pillars of a Sovereign Estate"
-description: "A plain-English guide to the five dimensions we assess in every estate, and what separates a typical uninspected estate from a sovereign benchmark."
+description: "How Echo 7 scores an IT estate across five sovereignty pillars — Identity, Velocity, Resilience, Security, Cognitive — and converts the result into a board-level Technical Debt Burden."
 publishDate: 2026-06-17
 ---
 

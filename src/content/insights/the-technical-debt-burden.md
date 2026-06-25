@@ -1,6 +1,6 @@
 ---
 title: "The Technical Debt Burden: What Your IT Estate Is Actually Costing You"
-description: "Why the true cost of an unmanaged IT estate is hidden across support contracts, insurance premiums and lost deals, and how to quantify it."
+description: "The Technical Debt Burden converts your legacy IT risk into a single £ figure your board can act on. Echo 7 explains the methodology behind the number."
 publishDate: 2026-06-17
 ---
 

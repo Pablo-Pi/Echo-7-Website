@@ -1,6 +1,6 @@
 ---
 title: "UK Data Residency: Enforced, Not Promised"
-description: "Why a contractual promise of UK data residency is not the same as a technical control that actually prevents data from leaving the country."
+description: "UK data residency is meaningless unless it is enforced at the infrastructure level. Echo 7 explains why a contractual clause is not the same as an Azure Policy."
 publishDate: 2026-06-17
 ---
 
